@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ktg.mes.wm.mapper.WmArrivalNoticeMapper">
+    
+    <resultMap type="WmArrivalNotice" id="WmArrivalNoticeResult">
+        <result property="noticeId"    column="notice_id"    />
+        <result property="noticeCode"    column="notice_code"    />
+        <result property="noticeName"    column="notice_name"    />
+        <result property="poCode"    column="po_code"    />
+        <result property="vendorId"    column="vendor_id"    />
+        <result property="vendorCode"    column="vendor_code"    />
+        <result property="vendorName"    column="vendor_name"    />
+        <result property="vendorNick"    column="vendor_nick"    />
+        <result property="arrivalDate"    column="arrival_date"    />
+        <result property="contact"    column="contact"    />
+        <result property="tel"    column="tel"    />
+        <result property="status"    column="status"    />
+        <result property="remark"    column="remark"    />
+        <result property="attr1"    column="attr1"    />
+        <result property="attr2"    column="attr2"    />
+        <result property="attr3"    column="attr3"    />
+        <result property="attr4"    column="attr4"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectWmArrivalNoticeVo">
+        select notice_id, notice_code, notice_name, po_code, vendor_id, vendor_code, vendor_name, vendor_nick, arrival_date, contact, tel, status, remark, attr1, attr2, attr3, attr4, create_by, create_time, update_by, update_time from wm_arrival_notice
+    </sql>
+
+    <select id="selectWmArrivalNoticeList" parameterType="WmArrivalNotice" resultMap="WmArrivalNoticeResult">
+        <include refid="selectWmArrivalNoticeVo"/>
+        <where>  
+            <if test="noticeCode != null  and noticeCode != ''"> and notice_code = #{noticeCode}</if>
+            <if test="noticeName != null  and noticeName != ''"> and notice_name like concat('%', #{noticeName}, '%')</if>
+            <if test="poCode != null  and poCode != ''"> and po_code = #{poCode}</if>
+            <if test="vendorId != null "> and vendor_id = #{vendorId}</if>
+            <if test="vendorCode != null  and vendorCode != ''"> and vendor_code = #{vendorCode}</if>
+            <if test="vendorName != null  and vendorName != ''"> and vendor_name like concat('%', #{vendorName}, '%')</if>
+            <if test="vendorNick != null  and vendorNick != ''"> and vendor_nick = #{vendorNick}</if>
+            <if test="contact != null  and contact != ''"> and contact = #{contact}</if>
+            <if test="tel != null  and tel != ''"> and tel = #{tel}</if>
+            <if test="arrivalDate != null "> and arrival_date = #{arrivalDate}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+        order by create_time desc
+    </select>
+    
+    <select id="selectWmArrivalNoticeByNoticeId" parameterType="Long" resultMap="WmArrivalNoticeResult">
+        <include refid="selectWmArrivalNoticeVo"/>
+        where notice_id = #{noticeId}
+    </select>
+
+    <select id="checkRnCodeUnique" parameterType="WmArrivalNotice" resultMap="WmArrivalNoticeResult">
+        <include refid="selectWmArrivalNoticeVo"/>
+        where notice_code = #{noticeCode}
+    </select>
+        
+    <insert id="insertWmArrivalNotice" parameterType="WmArrivalNotice" useGeneratedKeys="true" keyProperty="noticeId">
+        insert into wm_arrival_notice
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="noticeCode != null and noticeCode != ''">notice_code,</if>
+            <if test="noticeName != null and noticeName != ''">notice_name,</if>
+            <if test="poCode != null">po_code,</if>
+            <if test="vendorId != null">vendor_id,</if>
+            <if test="vendorCode != null">vendor_code,</if>
+            <if test="vendorName != null">vendor_name,</if>
+            <if test="vendorNick != null">vendor_nick,</if>
+            <if test="arrivalDate != null">arrival_date,</if>
+            <if test="contact != null">contact,</if>
+            <if test="tel != null">tel,</if>
+            <if test="status != null">status,</if>
+            <if test="remark != null">remark,</if>
+            <if test="attr1 != null">attr1,</if>
+            <if test="attr2 != null">attr2,</if>
+            <if test="attr3 != null">attr3,</if>
+            <if test="attr4 != null">attr4,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="noticeCode != null and noticeCode != ''">#{noticeCode},</if>
+            <if test="noticeName != null and noticeName != ''">#{noticeName},</if>
+            <if test="poCode != null">#{poCode},</if>
+            <if test="vendorId != null">#{vendorId},</if>
+            <if test="vendorCode != null">#{vendorCode},</if>
+            <if test="vendorName != null">#{vendorName},</if>
+            <if test="vendorNick != null">#{vendorNick},</if>
+            <if test="arrivalDate != null">#{arrivalDate},</if>
+            <if test="contact != null">#{contact},</if>
+            <if test="tel != null">#{tel},</if>
+            <if test="status != null">#{status},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="attr1 != null">#{attr1},</if>
+            <if test="attr2 != null">#{attr2},</if>
+            <if test="attr3 != null">#{attr3},</if>
+            <if test="attr4 != null">#{attr4},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateWmArrivalNotice" parameterType="WmArrivalNotice">
+        update wm_arrival_notice
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="noticeCode != null and noticeCode != ''">notice_code = #{noticeCode},</if>
+            <if test="noticeName != null and noticeName != ''">notice_name = #{noticeName},</if>
+            <if test="poCode != null">po_code = #{poCode},</if>
+            <if test="vendorId != null">vendor_id = #{vendorId},</if>
+            <if test="vendorCode != null">vendor_code = #{vendorCode},</if>
+            <if test="vendorName != null">vendor_name = #{vendorName},</if>
+            <if test="vendorNick != null">vendor_nick = #{vendorNick},</if>
+            <if test="arrivalDate != null">arrival_date = #{arrivalDate},</if>
+            <if test="contact != null">contact = #{contact},</if>
+            <if test="tel != null">tel = #{tel},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="attr1 != null">attr1 = #{attr1},</if>
+            <if test="attr2 != null">attr2 = #{attr2},</if>
+            <if test="attr3 != null">attr3 = #{attr3},</if>
+            <if test="attr4 != null">attr4 = #{attr4},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where notice_id = #{noticeId}
+    </update>
+
+    <delete id="deleteWmArrivalNoticeByNoticeId" parameterType="Long">
+        delete from wm_arrival_notice where notice_id = #{noticeId}
+    </delete>
+
+    <delete id="deleteWmArrivalNoticeByNoticeIds" parameterType="String">
+        delete from wm_arrival_notice where notice_id in 
+        <foreach item="noticeId" collection="array" open="(" separator="," close=")">
+            #{noticeId}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ktg.mes.dv.mapper.DvMaintenRecordLineMapper">
+    
+    <resultMap type="DvMaintenRecordLine" id="DvMaintenRecordLineResult">
+        <result property="lineId"    column="line_id"    />
+        <result property="recordId"    column="record_id"    />
+        <result property="subjectId"    column="subject_id"    />
+        <result property="subjectCode"    column="subject_code"    />
+        <result property="subjectName"    column="subject_name"    />
+        <result property="subjectType"    column="subject_type"    />
+        <result property="subjectContent"    column="subject_content"    />
+        <result property="subjectStandard"    column="subject_standard"    />
+        <result property="maintenStatus"    column="mainten_status"    />
+        <result property="maintenResult"    column="mainten_result"    />
+        <result property="attr1"    column="attr1"    />
+        <result property="attr2"    column="attr2"    />
+        <result property="attr3"    column="attr3"    />
+        <result property="attr4"    column="attr4"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectDvMaintenRecordLineVo">
+        select line_id, record_id, subject_id, subject_code, subject_name, subject_type, subject_content, subject_standard, mainten_status, mainten_result, attr1, attr2, attr3, attr4, create_by, create_time, update_by, update_time from dv_mainten_record_line
+    </sql>
+
+    <select id="selectDvMaintenRecordLineList" parameterType="DvMaintenRecordLine" resultMap="DvMaintenRecordLineResult">
+        <include refid="selectDvMaintenRecordLineVo"/>
+        <where>  
+            <if test="recordId != null "> and record_id = #{recordId}</if>
+            <if test="subjectId != null "> and subject_id = #{subjectId}</if>
+            <if test="subjectCode != null  and subjectCode != ''"> and subject_code = #{subjectCode}</if>
+            <if test="subjectName != null  and subjectName != ''"> and subject_name like concat('%', #{subjectName}, '%')</if>
+            <if test="subjectType != null  and subjectType != ''"> and subject_type = #{subjectType}</if>
+            <if test="subjectContent != null  and subjectContent != ''"> and subject_content = #{subjectContent}</if>
+            <if test="subjectStandard != null  and subjectStandard != ''"> and subject_standard = #{subjectStandard}</if>
+            <if test="maintenStatus != null  and maintenStatus != ''"> and mainten_status = #{maintenStatus}</if>
+            <if test="maintenResult != null  and maintenResult != ''"> and mainten_result = #{maintenResult}</if>
+        </where>
+    </select>
+    
+    <select id="selectDvMaintenRecordLineByLineId" parameterType="Long" resultMap="DvMaintenRecordLineResult">
+        <include refid="selectDvMaintenRecordLineVo"/>
+        where line_id = #{lineId}
+    </select>
+        
+    <insert id="insertDvMaintenRecordLine" parameterType="DvMaintenRecordLine" useGeneratedKeys="true" keyProperty="lineId">
+        insert into dv_mainten_record_line
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="recordId != null">record_id,</if>
+            <if test="subjectId != null">subject_id,</if>
+            <if test="subjectCode != null and subjectCode != ''">subject_code,</if>
+            <if test="subjectName != null">subject_name,</if>
+            <if test="subjectType != null">subject_type,</if>
+            <if test="subjectContent != null and subjectContent != ''">subject_content,</if>
+            <if test="subjectStandard != null">subject_standard,</if>
+            <if test="maintenStatus != null and maintenStatus != ''">mainten_status,</if>
+            <if test="maintenResult != null">mainten_result,</if>
+            <if test="attr1 != null">attr1,</if>
+            <if test="attr2 != null">attr2,</if>
+            <if test="attr3 != null">attr3,</if>
+            <if test="attr4 != null">attr4,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="recordId != null">#{recordId},</if>
+            <if test="subjectId != null">#{subjectId},</if>
+            <if test="subjectCode != null and subjectCode != ''">#{subjectCode},</if>
+            <if test="subjectName != null">#{subjectName},</if>
+            <if test="subjectType != null">#{subjectType},</if>
+            <if test="subjectContent != null and subjectContent != ''">#{subjectContent},</if>
+            <if test="subjectStandard != null">#{subjectStandard},</if>
+            <if test="maintenStatus != null and maintenStatus != ''">#{maintenStatus},</if>
+            <if test="maintenResult != null">#{maintenResult},</if>
+            <if test="attr1 != null">#{attr1},</if>
+            <if test="attr2 != null">#{attr2},</if>
+            <if test="attr3 != null">#{attr3},</if>
+            <if test="attr4 != null">#{attr4},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateDvMaintenRecordLine" parameterType="DvMaintenRecordLine">
+        update dv_mainten_record_line
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="recordId != null">record_id = #{recordId},</if>
+            <if test="subjectId != null">subject_id = #{subjectId},</if>
+            <if test="subjectCode != null and subjectCode != ''">subject_code = #{subjectCode},</if>
+            <if test="subjectName != null">subject_name = #{subjectName},</if>
+            <if test="subjectType != null">subject_type = #{subjectType},</if>
+            <if test="subjectContent != null and subjectContent != ''">subject_content = #{subjectContent},</if>
+            <if test="subjectStandard != null">subject_standard = #{subjectStandard},</if>
+            <if test="maintenStatus != null and maintenStatus != ''">mainten_status = #{maintenStatus},</if>
+            <if test="maintenResult != null">mainten_result = #{maintenResult},</if>
+            <if test="attr1 != null">attr1 = #{attr1},</if>
+            <if test="attr2 != null">attr2 = #{attr2},</if>
+            <if test="attr3 != null">attr3 = #{attr3},</if>
+            <if test="attr4 != null">attr4 = #{attr4},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where line_id = #{lineId}
+    </update>
+
+    <delete id="deleteDvMaintenRecordLineByLineId" parameterType="Long">
+        delete from dv_mainten_record_line where line_id = #{lineId}
+    </delete>
+
+    <delete id="deleteDvMaintenRecordLineByLineIds" parameterType="String">
+        delete from dv_mainten_record_line where line_id in 
+        <foreach item="lineId" collection="array" open="(" separator="," close=")">
+            #{lineId}
+        </foreach>
+    </delete>
+</mapper>

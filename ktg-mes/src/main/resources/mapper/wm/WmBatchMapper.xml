@@ -1,0 +1,395 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ktg.mes.wm.mapper.WmBatchMapper">
+    
+    <resultMap type="WmBatch" id="WmBatchResult">
+        <result property="batchId"    column="batch_id"    />
+        <result property="batchCode"    column="batch_code"    />
+        <result property="itemId"    column="item_id"    />
+        <result property="itemCode"    column="item_code"    />
+        <result property="itemName"    column="item_name"    />
+        <result property="specification"    column="specification"    />
+        <result property="unitOfMeasure"    column="unit_of_measure"    />
+        <result property="produceDate"    column="produce_date"    />
+        <result property="expireDate"    column="expire_date"    />
+        <result property="recptDate"    column="recpt_date"    />
+        <result property="vendorId"    column="vendor_id"    />
+        <result property="vendorCode"    column="vendor_code"    />
+        <result property="vendorName"    column="vendor_name"    />
+        <result property="vendorNick"    column="vendor_nick"    />
+        <result property="clientId"    column="client_id"    />
+        <result property="clientCode"    column="client_code"    />
+        <result property="clientName"    column="client_name"    />
+        <result property="clientNick"    column="client_nick"    />
+        <result property="coCode"    column="co_code"    />
+        <result property="poCode"    column="po_code"    />
+        <result property="workorderId"    column="workorder_id"    />
+        <result property="workorderCode"    column="workorder_code"    />
+        <result property="taskId"    column="task_id"    />
+        <result property="taskCode"    column="task_code"    />
+        <result property="workstationId"    column="workstation_id"    />
+        <result property="workstationCode"    column="workstation_code"    />
+        <result property="toolId"    column="tool_id"    />
+        <result property="toolCode"    column="tool_code"    />
+        <result property="moldId"    column="mold_id"    />
+        <result property="moldCode"    column="mold_code"    />
+        <result property="lotNumber"    column="lot_number"    />
+        <result property="qualityStatus"    column="quality_status"    />
+        <result property="remark"    column="remark"    />
+        <result property="attr1"    column="attr1"    />
+        <result property="attr2"    column="attr2"    />
+        <result property="attr3"    column="attr3"    />
+        <result property="attr4"    column="attr4"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectWmBatchVo">
+        select batch_id, batch_code, item_id, item_code, item_name, specification, unit_of_measure, produce_date, expire_date, recpt_date, vendor_id, vendor_code, vendor_name, vendor_nick, client_id, client_code, client_name, client_nick, co_code, po_code, workorder_id, workorder_code, task_id, task_code, workstation_id, workstation_code, tool_id, tool_code, mold_id, mold_code, lot_number, quality_status, remark, attr1, attr2, attr3, attr4, create_by, create_time, update_by, update_time from wm_batch
+    </sql>
+
+    <select id="selectWmBatchList" parameterType="WmBatch" resultMap="WmBatchResult">
+        <include refid="selectWmBatchVo"/>
+        <where>  
+            <if test="batchCode != null  and batchCode != ''"> and batch_code = #{batchCode}</if>
+            <if test="itemId != null "> and item_id = #{itemId}</if>
+            <if test="itemCode != null  and itemCode != ''"> and item_code = #{itemCode}</if>
+            <if test="itemName != null  and itemName != ''"> and item_name like concat('%', #{itemName}, '%')</if>
+            <if test="specification != null  and specification != ''"> and specification = #{specification}</if>
+            <if test="unitOfMeasure != null  and unitOfMeasure != ''"> and unit_of_measure = #{unitOfMeasure}</if>
+            <if test="produceDate != null "> and produce_date = #{produceDate}</if>
+            <if test="expireDate != null "> and expire_date = #{expireDate}</if>
+            <if test="recptDate != null "> and recpt_date = #{recptDate}</if>
+            <if test="vendorId != null "> and vendor_id = #{vendorId}</if>
+            <if test="vendorCode != null  and vendorCode != ''"> and vendor_code = #{vendorCode}</if>
+            <if test="vendorName != null  and vendorName != ''"> and vendor_name like concat('%', #{vendorName}, '%')</if>
+            <if test="vendorNick != null  and vendorNick != ''"> and vendor_nick = #{vendorNick}</if>
+            <if test="clientId != null "> and client_id = #{clientId}</if>
+            <if test="clientCode != null  and clientCode != ''"> and client_code = #{clientCode}</if>
+            <if test="clientName != null  and clientName != ''"> and client_name like concat('%', #{clientName}, '%')</if>
+            <if test="clientNick != null  and clientNick != ''"> and client_nick = #{clientNick}</if>
+            <if test="coCode != null  and coCode != ''"> and co_code = #{coCode}</if>
+            <if test="poCode != null  and poCode != ''"> and po_code = #{poCode}</if>
+            <if test="workorderId != null "> and workorder_id = #{workorderId}</if>
+            <if test="workorderCode != null  and workorderCode != ''"> and workorder_code = #{workorderCode}</if>
+            <if test="taskId != null "> and task_id = #{taskId}</if>
+            <if test="taskCode != null  and taskCode != ''"> and task_code = #{taskCode}</if>
+            <if test="workstationId != null "> and workstation_id = #{workstationId}</if>
+            <if test="workstationCode != null  and workstationCode != ''"> and workstation_code = #{workstationCode}</if>
+            <if test="toolId != null "> and tool_id = #{toolId}</if>
+            <if test="toolCode != null  and toolCode != ''"> and tool_code = #{toolCode}</if>
+            <if test="moldId != null "> and mold_id = #{moldId}</if>
+            <if test="moldCode != null  and moldCode != ''"> and mold_code = #{moldCode}</if>
+            <if test="lotNumber != null  and lotNumber != ''"> and lot_number = #{lotNumber}</if>
+            <if test="qualityStatus != null  and qualityStatus != ''"> and quality_status = #{qualityStatus}</if>
+        </where>
+        order by create_time desc
+    </select>
+    
+    <select id="selectWmBatchByBatchId" parameterType="Long" resultMap="WmBatchResult">
+        <include refid="selectWmBatchVo"/>
+        where batch_id = #{batchId}
+    </select>
+
+    <select id="selectWmBatchByBatchCode" parameterType="String" resultMap="WmBatchResult">
+        <include refid="selectWmBatchVo"/>
+        where batch_code = #{batchCode}
+        limit 1
+    </select>
+
+    <select id="getBatchCodeByParams" parameterType="Wmbatch" resultMap="WmBatchResult">
+        <include refid="selectWmBatchVo"/>
+        <where>
+            <if test="itemId != null "> and item_id = #{itemId}</if>
+            <if test="itemCode != null  and itemCode != ''"> and item_code = #{itemCode}</if>
+            <if test="batchCode != null  and batchCode != ''"> and batch_code = #{batchCode}</if>
+            <choose>
+                <when test="vendorId != null"> and vendor_id = #{vendorId}</when>
+                <otherwise> and vendor_id is null</otherwise>
+            </choose>
+            <choose>
+                <when test="vendorCode != null and vendorCode != ''"> and vendor_code = #{vendorCode}</when>
+                <otherwise> and vendor_code is null</otherwise>
+            </choose>
+
+            <choose>
+                <when test="clientId != null"> and client_id = #{clientId}</when>
+                <otherwise> and client_id is null</otherwise>
+            </choose>
+            <choose>
+                <when test="clientCode != null and clientCode != ''"> and client_code = #{clientCode}</when>
+                <otherwise> and client_code is null</otherwise>
+            </choose>
+
+            <choose>
+                <when test="coCode != null and coCode != ''"> and co_code = #{coCode}</when>
+                <otherwise> and co_code is null</otherwise>
+            </choose>
+            <choose>
+                <when test="poCode != null and poCode != ''"> and po_code = #{poCode}</when>
+                <otherwise> and po_code is null</otherwise>
+            </choose>
+            <choose>
+                <when test="workorderId != null"> and workorder_id = #{workorderId}</when>
+                <otherwise> and workorder_id is null</otherwise>
+            </choose>
+            <choose>
+                <when test="workorderCode != null and workorderCode != ''"> and workorder_code = #{workorderCode}</when>
+                <otherwise> and workorder_code is null</otherwise>
+            </choose>
+            <choose>
+                <when test="taskId != null"> and task_id = #{taskId}</when>
+                <otherwise> and task_id is null</otherwise>
+            </choose>
+            <choose>
+                <when test="taskCode != null and taskCode != ''"> and task_code = #{taskCode}</when>
+                <otherwise> and task_code is null</otherwise>
+            </choose>
+            <choose>
+                <when test="workstationId != null"> and workstation_id = #{workstationId}</when>
+                <otherwise> and workstation_id is null</otherwise>
+            </choose>
+            <choose>
+                <when test="workstationCode != null and workstationCode != ''"> and workstation_code = #{workstationCode}</when>
+                <otherwise> and workstation_code is null</otherwise>
+            </choose>
+            <choose>
+                <when test="toolId != null"> and tool_id = #{toolId}</when>
+                <otherwise> and tool_id is null</otherwise>
+            </choose>
+            <choose>
+                <when test="toolCode != null and toolCode != ''"> and tool_code = #{toolCode}</when>
+                <otherwise> and tool_code is null</otherwise>
+            </choose>
+            <choose>
+                <when test="moldId != null"> and mold_id = #{moldId}</when>
+                <otherwise> and mold_id is null</otherwise>
+            </choose>
+            <choose>
+                <when test="moldCode != null and moldCode != ''"> and mold_code = #{moldCode}</when>
+                <otherwise> and mold_code is null</otherwise>
+            </choose>
+            <choose>
+                <when test="lotNumber != null and lotNumber != ''"> and lot_number = #{lotNumber}</when>
+                <otherwise> and lot_number is null</otherwise>
+            </choose>
+            <choose>
+                <when test="qualityStatus != null and qualityStatus != ''"> and quality_status = #{qualityStatus}</when>
+                <otherwise> and quality_status is null</otherwise>
+            </choose>
+        </where>
+        order by create_time asc limit 1
+    </select>
+
+
+    <select id="checkBatchCodeByBatchAndProperties" parameterType="Wmbatch" resultMap="WmBatchResult">
+        <include refid="selectWmBatchVo"/>
+        <where>
+            <if test="batchId != null " > and batch_id = #{batchId}</if>
+            <if test="batchCode != null  and batchCode != ''"> and batch_code = #{batchCode}</if>
+            <if test="itemId != null "> and item_id = #{itemId}</if>
+            <if test="itemCode != null  and itemCode != ''"> and item_code = #{itemCode}</if>
+            <if test="produceDate != null "> and produce_date = #{produceDate}</if>
+            <if test="expireDate != null "> and expire_date = #{expireDate}</if>
+            <if test="recptDate != null "> and recpt_date = #{recptDate}</if>
+            <if test="vendorId != null "> and vendor_id = #{vendorId}</if>
+            <if test="vendorCode != null  and vendorCode != ''"> and vendor_code = #{vendorCode}</if>
+            <if test="clientId != null "> and client_id = #{clientId}</if>
+            <if test="clientCode != null  and clientCode != ''"> and client_code = #{clientCode}</if>
+
+            <if test="coCode != null  and coCode != ''"> and co_code = #{coCode}</if>
+            <if test="poCode != null  and poCode != ''"> and po_code = #{poCode}</if>
+            <if test="workorderId != null "> and workorder_id = #{workorderId}</if>
+            <if test="workorderCode != null  and workorderCode != ''"> and workorder_code = #{workorderCode}</if>
+            <if test="taskId != null "> and task_id = #{taskId}</if>
+            <if test="taskCode != null  and taskCode != ''"> and task_code = #{taskCode}</if>
+            <if test="workstationId != null "> and workstation_id = #{workstationId}</if>
+            <if test="workstationCode != null  and workstationCode != ''"> and workstation_code = #{workstationCode}</if>
+            <if test="toolId != null "> and tool_id = #{toolId}</if>
+            <if test="toolCode != null  and toolCode != ''"> and tool_code = #{toolCode}</if>
+            <if test="moldId != null "> and mold_id = #{moldId}</if>
+            <if test="moldCode != null  and moldCode != ''"> and mold_code = #{moldCode}</if>
+            <if test="lotNumber != null  and lotNumber != ''"> and lot_number = #{lotNumber}</if>
+            <if test="qualityStatus != null  and qualityStatus != ''"> and quality_status = #{qualityStatus}</if>
+        </where>
+        order by create_time asc limit 1
+    </select>
+
+    <select id="selectForwardBatchList" parameterType="String" resultMap="WmBatchResult">
+        select distinct pf.workorder_code,pf.item_id,pf.item_code,pf.item_name,pf.specification,pf.unit_of_measure,pf.unit_name,ppl.batch_id,ppl.batch_code
+        from wm_item_consume_detail icl
+                 left join wm_item_consume ic
+                           on icl.record_id = ic.record_id
+                 left join pro_feedback pf
+                           on pf.record_id = ic.feedback_id
+                 left join wm_product_produce pp
+                           on pp.workorder_id = ic.workorder_id
+                 left join wm_product_produce_line ppl
+                           on pp.record_id = ppl.record_id
+        where icl.batch_code =  #{batchCode}
+    </select>
+
+    <select id="selectBackwardBatchList" parameterType="String" resultMap="WmBatchResult">
+        select distinct ic.workorder_code,icd.item_id,icd.item_code,icd.item_name,icd.specification,icd.unit_of_measure,icd.unit_name,icd.batch_id,icd.batch_code
+        from wm_product_produce_detail ppd
+                 left join wm_product_produce pp
+                           on ppd.record_id = pp.record_id
+                 left join wm_item_consume ic
+                           on pp.workorder_id = ic.workorder_id
+                 left join wm_item_consume_detail icd
+                           on ic.record_id = icd.record_id
+        where ppd.batch_code = #{batchCode}
+          and icd.batch_code is not null
+    </select>
+
+
+    <insert id="insertWmBatch" parameterType="WmBatch" useGeneratedKeys="true" keyProperty="batchId">
+        insert into wm_batch
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="batchCode != null and batchCode != ''">batch_code,</if>
+            <if test="itemId != null">item_id,</if>
+            <if test="itemCode != null">item_code,</if>
+            <if test="itemName != null">item_name,</if>
+            <if test="specification != null">specification,</if>
+            <if test="unitOfMeasure != null">unit_of_measure,</if>
+            <if test="produceDate != null">produce_date,</if>
+            <if test="expireDate != null">expire_date,</if>
+            <if test="recptDate != null">recpt_date,</if>
+            <if test="vendorId != null">vendor_id,</if>
+            <if test="vendorCode != null">vendor_code,</if>
+            <if test="vendorName != null">vendor_name,</if>
+            <if test="vendorNick != null">vendor_nick,</if>
+            <if test="clientId != null">client_id,</if>
+            <if test="clientCode != null">client_code,</if>
+            <if test="clientName != null">client_name,</if>
+            <if test="clientNick != null">client_nick,</if>
+            <if test="coCode != null">co_code,</if>
+            <if test="poCode != null">po_code,</if>
+            <if test="workorderId != null">workorder_id,</if>
+            <if test="workorderCode != null">workorder_code,</if>
+            <if test="taskId != null">task_id,</if>
+            <if test="taskCode != null">task_code,</if>
+            <if test="workstationId != null">workstation_id,</if>
+            <if test="workstationCode != null">workstation_code,</if>
+            <if test="toolId != null">tool_id,</if>
+            <if test="toolCode != null">tool_code,</if>
+            <if test="moldId != null">mold_id,</if>
+            <if test="moldCode != null">mold_code,</if>
+            <if test="lotNumber != null">lot_number,</if>
+            <if test="qualityStatus != null">quality_status,</if>
+            <if test="remark != null">remark,</if>
+            <if test="attr1 != null">attr1,</if>
+            <if test="attr2 != null">attr2,</if>
+            <if test="attr3 != null">attr3,</if>
+            <if test="attr4 != null">attr4,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="batchCode != null and batchCode != ''">#{batchCode},</if>
+            <if test="itemId != null">#{itemId},</if>
+            <if test="itemCode != null">#{itemCode},</if>
+            <if test="itemName != null">#{itemName},</if>
+            <if test="specification != null">#{specification},</if>
+            <if test="unitOfMeasure != null">#{unitOfMeasure},</if>
+            <if test="produceDate != null">#{produceDate},</if>
+            <if test="expireDate != null">#{expireDate},</if>
+            <if test="recptDate != null">#{recptDate},</if>
+            <if test="vendorId != null">#{vendorId},</if>
+            <if test="vendorCode != null">#{vendorCode},</if>
+            <if test="vendorName != null">#{vendorName},</if>
+            <if test="vendorNick != null">#{vendorNick},</if>
+            <if test="clientId != null">#{clientId},</if>
+            <if test="clientCode != null">#{clientCode},</if>
+            <if test="clientName != null">#{clientName},</if>
+            <if test="clientNick != null">#{clientNick},</if>
+            <if test="coCode != null">#{coCode},</if>
+            <if test="poCode != null">#{poCode},</if>
+            <if test="workorderId != null">#{workorderId},</if>
+            <if test="workorderCode != null">#{workorderCode},</if>
+            <if test="taskId != null">#{taskId},</if>
+            <if test="taskCode != null">#{taskCode},</if>
+            <if test="workstationId != null">#{workstationId},</if>
+            <if test="workstationCode != null">#{workstationCode},</if>
+            <if test="toolId != null">#{toolId},</if>
+            <if test="toolCode != null">#{toolCode},</if>
+            <if test="moldId != null">#{moldId},</if>
+            <if test="moldCode != null">#{moldCode},</if>
+            <if test="lotNumber != null">#{lotNumber},</if>
+            <if test="qualityStatus != null">#{qualityStatus},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="attr1 != null">#{attr1},</if>
+            <if test="attr2 != null">#{attr2},</if>
+            <if test="attr3 != null">#{attr3},</if>
+            <if test="attr4 != null">#{attr4},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateWmBatch" parameterType="WmBatch">
+        update wm_batch
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="batchCode != null and batchCode != ''">batch_code = #{batchCode},</if>
+            <if test="itemId != null">item_id = #{itemId},</if>
+            <if test="itemCode != null">item_code = #{itemCode},</if>
+            <if test="itemName != null">item_name = #{itemName},</if>
+            <if test="specification != null">specification = #{specification},</if>
+            <if test="unitOfMeasure != null">unit_of_measure = #{unitOfMeasure},</if>
+            <if test="produceDate != null">produce_date = #{produceDate},</if>
+            <if test="expireDate != null">expire_date = #{expireDate},</if>
+            <if test="recptDate != null">recpt_date = #{recptDate},</if>
+            <if test="vendorId != null">vendor_id = #{vendorId},</if>
+            <if test="vendorCode != null">vendor_code = #{vendorCode},</if>
+            <if test="vendorName != null">vendor_name = #{vendorName},</if>
+            <if test="vendorNick != null">vendor_nick = #{vendorNick},</if>
+            <if test="clientId != null">client_id = #{clientId},</if>
+            <if test="clientCode != null">client_code = #{clientCode},</if>
+            <if test="clientName != null">client_name = #{clientName},</if>
+            <if test="clientNick != null">client_nick = #{clientNick},</if>
+            <if test="coCode != null">co_code = #{coCode},</if>
+            <if test="poCode != null">po_code = #{poCode},</if>
+            <if test="workorderId != null">workorder_id = #{workorderId},</if>
+            <if test="workorderCode != null">workorder_code = #{workorderCode},</if>
+            <if test="taskId != null">task_id = #{taskId},</if>
+            <if test="taskCode != null">task_code = #{taskCode},</if>
+            <if test="workstationId != null">workstation_id = #{workstationId},</if>
+            <if test="workstationCode != null">workstation_code = #{workstationCode},</if>
+            <if test="toolId != null">tool_id = #{toolId},</if>
+            <if test="toolCode != null">tool_code = #{toolCode},</if>
+            <if test="moldId != null">mold_id = #{moldId},</if>
+            <if test="moldCode != null">mold_code = #{moldCode},</if>
+            <if test="lotNumber != null">lot_number = #{lotNumber},</if>
+            <if test="qualityStatus != null">quality_status = #{qualityStatus},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="attr1 != null">attr1 = #{attr1},</if>
+            <if test="attr2 != null">attr2 = #{attr2},</if>
+            <if test="attr3 != null">attr3 = #{attr3},</if>
+            <if test="attr4 != null">attr4 = #{attr4},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where batch_id = #{batchId}
+    </update>
+
+    <delete id="deleteWmBatchByBatchId" parameterType="Long">
+        delete from wm_batch where batch_id = #{batchId}
+    </delete>
+
+    <delete id="deleteWmBatchByBatchIds" parameterType="String">
+        delete from wm_batch where batch_id in 
+        <foreach item="batchId" collection="array" open="(" separator="," close=")">
+            #{batchId}
+        </foreach>
+    </delete>
+</mapper>

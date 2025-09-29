@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ktg.mes.qc.mapper.QcResultMapper">
+    
+    <resultMap type="QcResult" id="QcResultResult">
+        <result property="resultId"    column="result_id"    />
+        <result property="resultCode"    column="result_code"    />
+        <result property="sourceDocId"    column="source_doc_id"    />
+        <result property="sourceDocCode"    column="source_doc_code"    />
+        <result property="sourceDocName"    column="source_doc_name"    />
+        <result property="sourceDocType"    column="source_doc_type"    />
+        <result property="itemId"    column="item_id"    />
+        <result property="itemCode"    column="item_code"    />
+        <result property="itemName"    column="item_name"    />
+        <result property="specification"    column="specification"    />
+        <result property="unitOfMeasure"    column="unit_of_measure"    />
+        <result property="snCode"    column="sn_code"    />
+        <result property="remark"    column="remark"    />
+        <result property="attr1"    column="attr1"    />
+        <result property="attr2"    column="attr2"    />
+        <result property="attr3"    column="attr3"    />
+        <result property="attr4"    column="attr4"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectQcResultVo">
+        select result_id, result_code, source_doc_id, source_doc_code, source_doc_name, source_doc_type, item_id, item_code, item_name, specification, unit_of_measure, sn_code, remark, attr1, attr2, attr3, attr4, create_by, create_time, update_by, update_time from qc_result
+    </sql>
+
+    <select id="selectQcResultList" parameterType="QcResult" resultMap="QcResultResult">
+        <include refid="selectQcResultVo"/>
+        <where>  
+            <if test="resultCode != null "> and result_code = #{resultCode}</if>
+            <if test="sourceDocId != null "> and source_doc_id = #{sourceDocId}</if>
+            <if test="sourceDocCode != null  and sourceDocCode != ''"> and source_doc_code = #{sourceDocCode}</if>
+            <if test="sourceDocName != null  and sourceDocName != ''"> and source_doc_name like concat('%', #{sourceDocName}, '%')</if>
+            <if test="sourceDocType != null  and sourceDocType != ''"> and source_doc_type = #{sourceDocType}</if>
+            <if test="itemId != null "> and item_id = #{itemId}</if>
+            <if test="itemCode != null  and itemCode != ''"> and item_code = #{itemCode}</if>
+            <if test="itemName != null  and itemName != ''"> and item_name like concat('%', #{itemName}, '%')</if>
+            <if test="specification != null  and specification != ''"> and specification = #{specification}</if>
+            <if test="unitOfMeasure != null  and unitOfMeasure != ''"> and unit_of_measure = #{unitOfMeasure}</if>
+            <if test="snCode != null  and snCode != ''"> and sn_code = #{snCode}</if>
+        </where>
+    </select>
+    
+    <select id="selectQcResultByResultId" parameterType="Long" resultMap="QcResultResult">
+        <include refid="selectQcResultVo"/>
+        where result_id = #{resultId}
+    </select>
+        
+    <insert id="insertQcResult" parameterType="QcResult" useGeneratedKeys="true" keyProperty="resultId">
+        insert into qc_result
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="resultCode != null">result_code,</if>
+            <if test="sourceDocId != null">source_doc_id,</if>
+            <if test="sourceDocCode != null">source_doc_code,</if>
+            <if test="sourceDocName != null">source_doc_name,</if>
+            <if test="sourceDocType != null">source_doc_type,</if>
+            <if test="itemId != null">item_id,</if>
+            <if test="itemCode != null">item_code,</if>
+            <if test="itemName != null">item_name,</if>
+            <if test="specification != null">specification,</if>
+            <if test="unitOfMeasure != null">unit_of_measure,</if>
+            <if test="snCode != null">sn_code,</if>
+            <if test="remark != null">remark,</if>
+            <if test="attr1 != null">attr1,</if>
+            <if test="attr2 != null">attr2,</if>
+            <if test="attr3 != null">attr3,</if>
+            <if test="attr4 != null">attr4,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="resultCode != null">#{resultCode},</if>
+            <if test="sourceDocId != null">#{sourceDocId},</if>
+            <if test="sourceDocCode != null">#{sourceDocCode},</if>
+            <if test="sourceDocName != null">#{sourceDocName},</if>
+            <if test="sourceDocType != null">#{sourceDocType},</if>
+            <if test="itemId != null">#{itemId},</if>
+            <if test="itemCode != null">#{itemCode},</if>
+            <if test="itemName != null">#{itemName},</if>
+            <if test="specification != null">#{specification},</if>
+            <if test="unitOfMeasure != null">#{unitOfMeasure},</if>
+            <if test="snCode != null">#{snCode},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="attr1 != null">#{attr1},</if>
+            <if test="attr2 != null">#{attr2},</if>
+            <if test="attr3 != null">#{attr3},</if>
+            <if test="attr4 != null">#{attr4},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateQcResult" parameterType="QcResult">
+        update qc_result
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="resultCode != null">result_code = #{resultCode},</if>
+            <if test="sourceDocId != null">source_doc_id = #{sourceDocId},</if>
+            <if test="sourceDocCode != null">source_doc_code = #{sourceDocCode},</if>
+            <if test="sourceDocName != null">source_doc_name = #{sourceDocName},</if>
+            <if test="sourceDocType != null">source_doc_type = #{sourceDocType},</if>
+            <if test="itemId != null">item_id = #{itemId},</if>
+            <if test="itemCode != null">item_code = #{itemCode},</if>
+            <if test="itemName != null">item_name = #{itemName},</if>
+            <if test="specification != null">specification = #{specification},</if>
+            <if test="unitOfMeasure != null">unit_of_measure = #{unitOfMeasure},</if>
+            <if test="snCode != null">sn_code = #{snCode},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="attr1 != null">attr1 = #{attr1},</if>
+            <if test="attr2 != null">attr2 = #{attr2},</if>
+            <if test="attr3 != null">attr3 = #{attr3},</if>
+            <if test="attr4 != null">attr4 = #{attr4},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where result_id = #{resultId}
+    </update>
+
+    <delete id="deleteQcResultByResultId" parameterType="Long">
+        delete from qc_result where result_id = #{resultId}
+    </delete>
+
+    <delete id="deleteQcResultByResultIds" parameterType="String">
+        delete from qc_result where result_id in 
+        <foreach item="resultId" collection="array" open="(" separator="," close=")">
+            #{resultId}
+        </foreach>
+    </delete>
+</mapper>

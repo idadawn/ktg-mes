@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ktg.mes.qc.mapper.QcPendingInspectMapper">
+    <resultMap id="QcPendingInspectResult" type="QcPendingInspect">
+        <result property="sourceDocId"    column="source_doc_id"    />
+        <result property="sourceDocCode"    column="source_doc_code"    />
+        <result property="sourceDocType"    column="source_doc_type"    />
+        <result property="sourceLineId" column="source_doc_line_id"></result>
+        <result property="recordTime"    column="record_time"    />
+        <result property="qcType"    column="qc_type"    />
+        <result property="qcDetailType"    column="qc_detail_type"    />
+        <result property="itemId"    column="item_id"    />
+        <result property="itemCode"    column="item_code"    />
+        <result property="itemName"    column="item_name"    />
+        <result property="specification" column="specification"></result>
+        <result property="unitOfMeasure" column="unit_of_measure"></result>
+        <result property="unitName" column="unit_name"></result>
+        <result property="quantityCheck"    column="quantity_check"    />
+        <result property="workOrderId"    column="workorder_id"    />
+        <result property="workOrderCode"    column="workorder_code"    />
+        <result property="workOrderName"    column="workorder_name"    />
+        <result property="workstationId"    column="workstation_id"    />
+        <result property="workstationCode"    column="workstation_code"    />
+        <result property="workstationName"    column="workstation_name"    />
+        <result property="vendorClientId" column="vendor_client_id"></result>
+        <result property="vendorClientCode" column="vendor_client_code"></result>
+        <result property="vendorClientName" column="vendor_client_name"></result>
+        <result property="vendorClientNick" column="vendor_client_nick"></result>
+        <result property="batchCode" column="batch_code"></result>
+        <result property="taskId"    column="task_id"    />
+        <result property="taskCode"    column="task_code"    />
+        <result property="taskName"    column="task_name"    />
+        <result property="warehouseId"    column="warehouse_id"    />
+        <result property="warehouseCode"    column="warehouse_code"    />
+        <result property="warehouseName"    column="warehouse_name"    />
+        <result property="locationId"    column="location_id"    />
+        <result property="locationCode"    column="location_code"    />
+        <result property="locationName"    column="location_name"    />
+        <result property="areaId"    column="area_id"    />
+        <result property="areaCode"    column="area_code"    />
+        <result property="areaName"    column="area_name"    />
+        <result property="address"    column="address"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <select id="selectQcPendingList" parameterType="QcPendingInspect" resultMap="QcPendingInspectResult">
+        SELECT *
+        FROM
+            (
+                SELECT wor.recpt_id as source_doc_id,
+                       'OUTSOURCE_RECPT' as source_doc_type,
+                       wor.recpt_code as source_doc_code,
+                       worl.line_id as source_doc_line_id,
+                       wor.create_time as record_time,
+                       'IQC' as qc_type,
+                       'OIQC' as qc_detail_type,
+                       worl.item_id,
+                       worl.item_code,
+                       worl.item_name,
+                       worl.specification,
+                       worl.unit_of_measure,
+                       worl.unit_name,
+                       worl.quantity_recived as quantity_check,
+                       wor.workorder_id,
+                       wor.workorder_code,
+                       NULL AS workorder_name,
+                       NULL AS task_id,
+                       NULL AS task_code,
+                       NULL AS task_name,
+                       NULL AS workstation_id,
+                       NULL AS workstation_code,
+                       NULL AS workstation_name,
+                       wor.vendor_id as vendor_client_id,
+                       wor.vendor_code as vendor_client_code,
+                       wor.vendor_name as vendor_client_name,
+                       wor.vendor_nick as vendor_client_nick,
+                       worl.batch_id,
+                       worl.batch_code,
+                       null as warehouse_id,
+                       null as warehouse_code,
+                       null as warehouse_name,
+                       null as location_id,
+                       NULL AS location_code,
+                       NULL AS location_name,
+                       NULL AS area_id,
+                       NULL AS area_code,
+                       NULL AS area_name,
+                       NULL AS address
+                FROM wm_outsource_recpt wor
+                         LEFT JOIN wm_outsource_recpt_line worl
+                                   on wor.recpt_id = worl.recpt_id
+                WHERE wor.status = 'UNCHECK'
+                  AND worl.quality_status = 'NT'
+                UNION ALL
+                SELECT
+                    wi.notice_id as source_doc_id,
+                    'ARRIVAL_NOTICE' as source_doc_type,
+                    wi.notice_code AS source_doc_code,
+                    wil.line_id AS source_line_id,
+                    wi.create_time AS record_time,
+                    'IQC' AS qc_type,
+                    'IQC' AS qc_detail_type,
+                    wil.item_id,
+                    wil.item_code,
+                    wil.item_name,
+                    wil.specification,
+                    wil.unit_of_measure,
+                    wil.unit_name,
+                    wil.quantity_arrival AS quantity_check,
+                    NULL AS workorder_id,
+                    NULL AS workorder_code,
+                    NULL AS workorder_name,
+                    NULL AS task_id,
+                    NULL AS task_code,
+                    NULL AS task_name,
+                    NULL AS workstation_id,
+                    NULL AS workstation_code,
+                    NULL AS workstation_name,
+                    wi.vendor_id as vendor_client_id,
+                    wi.vendor_code as vendor_client_code,
+                    wi.vendor_name as vendor_client_name,
+                    wi.vendor_nick as vendor_client_nick,
+                    null as batch_id,
+                    null as batch_code,
+                    null as warehouse_id,
+                    null as warehouse_code,
+                    null as warehouse_name,
+                    null as location_id,
+                    NULL AS location_code,
+                    NULL AS location_name,
+                    NULL AS area_id,
+                    NULL AS area_code,
+                    NULL AS area_name,
+                    NULL AS address
+                FROM
+                    wm_arrival_notice wi
+                        LEFT JOIN wm_arrival_notice_line wil ON wi.notice_id = wil.notice_id
+                WHERE
+                    wil.iqc_check = 'Y'
+                  AND wil.iqc_id IS NULL
+                  AND wi.status = 'APPROVING'
+                UNION ALL
+                SELECT
+                    pf.rt_id as source_doc_id,
+                    'RT_ISSUE' as source_doc_type,
+                    ri.rt_code AS source_doc_code,
+                    pf.line_id as source_line_id,
+                    ri.rt_date AS record_time,
+                    'RQC' AS qc_type,
+                    'PRQC' AS qc_detail_type,
+                    pf.item_id,
+                    pf.item_code,
+                    pf.item_name,
+                    pf.specification,
+                    pf.unit_of_measure,
+                    pf.unit_name,
+                    pf.quantity_rt as quantity_check,
+                    ri.workorder_id,
+                    ri.workorder_code,
+                    NULL AS workorder_name,
+                    NULL AS task_id,
+                    NULL AS task_code,
+                    NULL AS task_name,
+                    ri.workstation_id,
+                    ri.workstation_code,
+                    ri.workstation_name,
+                    NULL as vendor_client_id,
+                    NULL as vendor_client_code,
+                    NULL as vendor_client_name,
+                    NULL as vendor_client_nick,
+                    pf.batch_id,
+                    pf.batch_code,
+                    NULL AS warehouse_id,
+                    NULL AS warehouse_code,
+                    NULL AS warehouse_name,
+                    NULL AS location_id,
+                    NULL AS location_code,
+                    NULL AS location_name,
+                    NULL AS area_id,
+                    NULL AS area_code,
+                    NULL AS area_name,
+                    ri.workstation_name AS address
+                from wm_rt_issue_line pf
+                         left join wm_rt_issue ri
+                                   on pf.rt_id = ri.rt_id
+                where pf.quality_status = 'NT'
+                  and ri.`status` = 'UNCHECK'
+                UNION ALL
+                SELECT
+                    pf.rt_id as source_doc_id,
+                    'RT_SALES' as source_doc_type,
+                    ri.rt_code AS source_doc_code,
+                    pf.line_id as source_line_id,
+                    ri.rt_date AS record_time,
+                    'RQC' AS qc_type,
+                    'CRQC' AS qc_detail_type,
+                    pf.item_id,
+                    pf.item_code,
+                    pf.item_name,
+                    pf.specification,
+                    pf.unit_of_measure,
+                    pf.unit_name,
+                    pf.quantity_rted as quantity_check,
+                    NULL AS workorder_id,
+                    NULL AS workorder_code,
+                    NULL AS workorder_name,
+                    NULL AS task_id,
+                    NULL AS task_code,
+                    NULL AS task_name,
+                    NULL AS workstation_id,
+                    NULL AS workstation_code,
+                    NULL AS workstation_name,
+                    ri.client_id as vendor_client_id,
+                    ri.client_code as vendor_client_code,
+                    ri.client_name as vendor_client_name,
+                    ri.client_nick as vendor_client_nick,
+                    pf.batch_id,
+                    pf.batch_code,
+                    NULL AS warehouse_id,
+                    NULL AS warehouse_code,
+                    NULL AS warehouse_name,
+                    NULL AS location_id,
+                    NULL AS location_code,
+                    NULL AS location_name,
+                    NULL AS area_id,
+                    NULL AS area_code,
+                    NULL AS area_name,
+                    NULL AS address
+                from wm_rt_sales_line pf
+                         left join wm_rt_sales ri
+                                   on pf.rt_id = ri.rt_id
+                where pf.quality_status = 'NT'
+                  and ri.`status` = 'UNCHECK'
+
+                UNION ALL
+                SELECT
+                    p.record_id as source_doc_id,
+                    'FEEDBACK' as source_doc_type,
+                    pf.feedback_code AS source_doc_code,
+                    l.line_id as source_line_id,
+                    pf.feedback_time AS record_time,
+                    'PQC' AS qc_type,
+                    'IPQC' AS qc_detail_type,
+                    l.item_id,
+                    l.item_code,
+                    l.item_name,
+                    l.specification,
+                    l.unit_of_measure,
+                    l.unit_name,
+                    l.quantity_produce as quantity_check,
+                    pf.workorder_id,
+                    pf.workorder_code,
+                    pf.workorder_name,
+                    pf.task_id,
+                    pf.task_code,
+                    NULL AS task_name,
+                    pf.workstation_id,
+                    pf.workstation_code,
+                    pf.workstation_name,
+                    NULL as vendor_client_id,
+                    NULL as vendor_client_code,
+                    NULL as vendor_client_name,
+                    NULL as vendor_client_nick,
+                    l.batch_id AS batch_id,
+                    l.batch_code AS batch_code,
+                    NULL AS warehouse_id,
+                    NULL AS warehouse_code,
+                    NULL AS warehouse_name,
+                    NULL AS location_id,
+                    NULL AS location_code,
+                    NULL AS location_name,
+                    NULL AS area_id,
+                    NULL AS area_code,
+                    NULL AS area_name,
+                    pf.workstation_name AS address
+                FROM wm_product_produce_line l
+                         left join wm_product_produce p on l.record_id = p.record_id
+                         left join pro_feedback pf on p.feedback_id = pf.record_id
+                WHERE
+                    l.quality_status ='NT' UNION ALL
+                SELECT
+                    ps.sales_id AS source_doc_id,
+                    'PRODUCT_SALES' as source_doc_type,
+                    ps.sales_code AS source_doc_code,
+                    psl.line_id AS source_line_id,
+                    ps.create_time AS record_time,
+                    'OQC' AS qc_type,
+                    'OQC' AS qc_detail_type,
+                    psl.item_id,
+                    psl.item_code,
+                    psl.item_name,
+                    psl.specification,
+                    psl.unit_of_measure,
+                    psl.unit_name,
+                    psl.quantity_sales AS quantity_check,
+                    NULL AS workorder_id,
+                    NULL AS workorder_code,
+                    NULL AS workorder_name,
+                    NULL AS task_id,
+                    NULL AS task_code,
+                    NULL AS task_name,
+                    NULL AS workstation_id,
+                    NULL AS workstation_code,
+                    NULL AS workstation_name,
+                    ps.client_id as vendor_client_id,
+                    ps.client_code as vendor_client_code,
+                    ps.client_name as vendor_client_name,
+                    ps.client_nick as vendor_client_nick,
+                    psl.batch_id,
+                    psl.batch_code,
+                    NULL AS warehouse_id,
+                    NULL AS warehouse_code,
+                    NULL AS warehouse_name,
+                    NULL AS location_id,
+                    NULL AS location_code,
+                    NULL AS location_name,
+                    NULL AS area_id,
+                    NULL AS area_code,
+                    NULL AS area_name,
+                    NULL AS address
+                FROM
+                    wm_product_sales ps
+                        LEFT JOIN wm_product_sales_line psl ON ps.sales_id = psl.sales_id
+                WHERE
+                    psl.oqc_check = 'Y'
+                  AND psl.quality_status = 'NT'
+            ) t
+        ORDER BY record_time DESC
+    </select>
+
+</mapper>

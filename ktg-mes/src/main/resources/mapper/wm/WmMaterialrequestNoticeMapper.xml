@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ktg.mes.wm.mapper.WmMaterialrequestNoticeMapper">
+    
+    <resultMap type="WmMaterialrequestNotice" id="WmMaterialrequestNoticeResult">
+        <result property="noticeId"    column="notice_id"    />
+        <result property="workstationId"    column="workstation_id"    />
+        <result property="workstaitonCode"    column="workstaiton_code"    />
+        <result property="workorderId"    column="workorder_id"    />
+        <result property="workorderCode"    column="workorder_code"    />
+        <result property="userId"    column="user_id"    />
+        <result property="userName"    column="user_name"    />
+        <result property="nickName"    column="nick_name"    />
+        <result property="requestTime"    column="request_time"    />
+        <result property="startTime"    column="start_time"    />
+        <result property="endTime"    column="end_time"    />
+        <result property="status"    column="status"    />
+        <result property="remark"    column="remark"    />
+        <result property="attr1"    column="attr1"    />
+        <result property="attr2"    column="attr2"    />
+        <result property="attr3"    column="attr3"    />
+        <result property="attr4"    column="attr4"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectWmMaterialrequestNoticeVo">
+        select notice_id, workstation_id, workstaiton_code, workorder_id, workorder_code, user_id, user_name, nick_name, request_time, start_time, end_time, status, remark, attr1, attr2, attr3, attr4, create_by, create_time, update_by, update_time from wm_materialrequest_notice
+    </sql>
+
+    <select id="selectWmMaterialrequestNoticeList" parameterType="WmMaterialrequestNotice" resultMap="WmMaterialrequestNoticeResult">
+        <include refid="selectWmMaterialrequestNoticeVo"/>
+        <where>  
+            <if test="workstationId != null "> and workstation_id = #{workstationId}</if>
+            <if test="workstaitonCode != null  and workstaitonCode != ''"> and workstaiton_code = #{workstaitonCode}</if>
+            <if test="workorderId != null "> and workorder_id = #{workorderId}</if>
+            <if test="workorderCode != null  and workorderCode != ''"> and workorder_code = #{workorderCode}</if>
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="userName != null  and userName != ''"> and user_name like concat('%', #{userName}, '%')</if>
+            <if test="nickName != null  and nickName != ''"> and nick_name like concat('%', #{nickName}, '%')</if>
+            <if test="requestTime != null "> and request_time = #{requestTime}</if>
+            <if test="startTime != null "> and start_time = #{startTime}</if>
+            <if test="endTime != null "> and end_time = #{endTime}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectWmMaterialrequestNoticeByNoticeId" parameterType="Long" resultMap="WmMaterialrequestNoticeResult">
+        <include refid="selectWmMaterialrequestNoticeVo"/>
+        where notice_id = #{noticeId}
+    </select>
+        
+    <insert id="insertWmMaterialrequestNotice" parameterType="WmMaterialrequestNotice" useGeneratedKeys="true" keyProperty="noticeId">
+        insert into wm_materialrequest_notice
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="workstationId != null">workstation_id,</if>
+            <if test="workstaitonCode != null">workstaiton_code,</if>
+            <if test="workorderId != null">workorder_id,</if>
+            <if test="workorderCode != null">workorder_code,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="userName != null">user_name,</if>
+            <if test="nickName != null">nick_name,</if>
+            <if test="requestTime != null">request_time,</if>
+            <if test="startTime != null">start_time,</if>
+            <if test="endTime != null">end_time,</if>
+            <if test="status != null">status,</if>
+            <if test="remark != null">remark,</if>
+            <if test="attr1 != null">attr1,</if>
+            <if test="attr2 != null">attr2,</if>
+            <if test="attr3 != null">attr3,</if>
+            <if test="attr4 != null">attr4,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="workstationId != null">#{workstationId},</if>
+            <if test="workstaitonCode != null">#{workstaitonCode},</if>
+            <if test="workorderId != null">#{workorderId},</if>
+            <if test="workorderCode != null">#{workorderCode},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="userName != null">#{userName},</if>
+            <if test="nickName != null">#{nickName},</if>
+            <if test="requestTime != null">#{requestTime},</if>
+            <if test="startTime != null">#{startTime},</if>
+            <if test="endTime != null">#{endTime},</if>
+            <if test="status != null">#{status},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="attr1 != null">#{attr1},</if>
+            <if test="attr2 != null">#{attr2},</if>
+            <if test="attr3 != null">#{attr3},</if>
+            <if test="attr4 != null">#{attr4},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateWmMaterialrequestNotice" parameterType="WmMaterialrequestNotice">
+        update wm_materialrequest_notice
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="workstationId != null">workstation_id = #{workstationId},</if>
+            <if test="workstaitonCode != null">workstaiton_code = #{workstaitonCode},</if>
+            <if test="workorderId != null">workorder_id = #{workorderId},</if>
+            <if test="workorderCode != null">workorder_code = #{workorderCode},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="userName != null">user_name = #{userName},</if>
+            <if test="nickName != null">nick_name = #{nickName},</if>
+            <if test="requestTime != null">request_time = #{requestTime},</if>
+            <if test="startTime != null">start_time = #{startTime},</if>
+            <if test="endTime != null">end_time = #{endTime},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="attr1 != null">attr1 = #{attr1},</if>
+            <if test="attr2 != null">attr2 = #{attr2},</if>
+            <if test="attr3 != null">attr3 = #{attr3},</if>
+            <if test="attr4 != null">attr4 = #{attr4},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where notice_id = #{noticeId}
+    </update>
+
+    <delete id="deleteWmMaterialrequestNoticeByNoticeId" parameterType="Long">
+        delete from wm_materialrequest_notice where notice_id = #{noticeId}
+    </delete>
+
+    <delete id="deleteWmMaterialrequestNoticeByNoticeIds" parameterType="String">
+        delete from wm_materialrequest_notice where notice_id in 
+        <foreach item="noticeId" collection="array" open="(" separator="," close=")">
+            #{noticeId}
+        </foreach>
+    </delete>
+</mapper>

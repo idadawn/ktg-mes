@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ktg.mes.md.mapper.MdItemBatchConfigMapper">
+    
+    <resultMap type="MdItemBatchConfig" id="MdItemBatchConfigResult">
+        <result property="configId"    column="config_id"    />
+        <result property="itemId"    column="item_id"    />
+        <result property="produceDateFlag"    column="produce_date_flag"    />
+        <result property="expireDateFlag"    column="expire_date_flag"    />
+        <result property="recptDateFlag"    column="recpt_date_flag"    />
+        <result property="vendorFlag"    column="vendor_flag"    />
+        <result property="clientFlag"    column="client_flag"    />
+        <result property="coCodeFlag"    column="co_code_flag"    />
+        <result property="poCodeFlag"    column="po_code_flag"    />
+        <result property="workorderFlag"    column="workorder_flag"    />
+        <result property="taskFlag"    column="task_flag"    />
+        <result property="workstationFlag"    column="workstation_flag"    />
+        <result property="toolFlag"    column="tool_flag"    />
+        <result property="moldFlag"    column="mold_flag"    />
+        <result property="lotNumberFlag"    column="lot_number_flag"    />
+        <result property="qualityStatusFlag"    column="quality_status_flag"    />
+        <result property="enableFlag"    column="enable_flag"    />
+        <result property="remark"    column="remark"    />
+        <result property="attr1"    column="attr1"    />
+        <result property="attr2"    column="attr2"    />
+        <result property="attr3"    column="attr3"    />
+        <result property="attr4"    column="attr4"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectMdItemBatchConfigVo">
+        select config_id, item_id, produce_date_flag, expire_date_flag, recpt_date_flag, vendor_flag, client_flag, co_code_flag, po_code_flag, workorder_flag, task_flag, workstation_flag, tool_flag, mold_flag, lot_number_flag, quality_status_flag, enable_flag, remark, attr1, attr2, attr3, attr4, create_by, create_time, update_by, update_time from md_item_batch_config
+    </sql>
+
+    <select id="selectMdItemBatchConfigList" parameterType="MdItemBatchConfig" resultMap="MdItemBatchConfigResult">
+        <include refid="selectMdItemBatchConfigVo"/>
+        <where>  
+            <if test="itemId != null "> and item_id = #{itemId}</if>
+            <if test="produceDateFlag != null  and produceDateFlag != ''"> and produce_date_flag = #{produceDateFlag}</if>
+            <if test="expireDateFlag != null  and expireDateFlag != ''"> and expire_date_flag = #{expireDateFlag}</if>
+            <if test="recptDateFlag != null  and recptDateFlag != ''"> and recpt_date_flag = #{recptDateFlag}</if>
+            <if test="vendorFlag != null  and vendorFlag != ''"> and vendor_flag = #{vendorFlag}</if>
+            <if test="clientFlag != null  and clientFlag != ''"> and client_flag = #{clientFlag}</if>
+            <if test="coCodeFlag != null  and coCodeFlag != ''"> and co_code_flag = #{coCodeFlag}</if>
+            <if test="poCodeFlag != null  and poCodeFlag != ''"> and po_code_flag = #{poCodeFlag}</if>
+            <if test="workorderFlag != null  and workorderFlag != ''"> and workorder_flag = #{workorderFlag}</if>
+            <if test="taskFlag != null  and taskFlag != ''"> and task_flag = #{taskFlag}</if>
+            <if test="workstationFlag != null  and workstationFlag != ''"> and workstation_flag = #{workstationFlag}</if>
+            <if test="toolFlag != null  and toolFlag != ''"> and tool_flag = #{toolFlag}</if>
+            <if test="moldFlag != null  and moldFlag != ''"> and mold_flag = #{moldFlag}</if>
+            <if test="lotNumberFlag != null  and lotNumberFlag != ''"> and lot_number_flag = #{lotNumberFlag}</if>
+            <if test="qualityStatusFlag != null  and qualityStatusFlag != ''"> and quality_status_flag = #{qualityStatusFlag}</if>
+            <if test="enableFlag != null  and enableFlag != ''"> and enable_flag = #{enableFlag}</if>
+            <if test="attr1 != null  and attr1 != ''"> and attr1 = #{attr1}</if>
+            <if test="attr2 != null  and attr2 != ''"> and attr2 = #{attr2}</if>
+            <if test="attr3 != null "> and attr3 = #{attr3}</if>
+            <if test="attr4 != null "> and attr4 = #{attr4}</if>
+        </where>
+    </select>
+    
+    <select id="selectMdItemBatchConfigByConfigId" parameterType="Long" resultMap="MdItemBatchConfigResult">
+        <include refid="selectMdItemBatchConfigVo"/>
+        where config_id = #{configId}
+    </select>
+
+    <select id="getMdItemBatchConfigByItemId" parameterType="Long" resultMap="MdItemBatchConfigResult">
+        <include refid="selectMdItemBatchConfigVo"/>
+        where item_id = #{itemId}
+        limit 1
+    </select>
+        
+    <insert id="insertMdItemBatchConfig" parameterType="MdItemBatchConfig" useGeneratedKeys="true" keyProperty="configId">
+        insert into md_item_batch_config
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="itemId != null">item_id,</if>
+            <if test="produceDateFlag != null">produce_date_flag,</if>
+            <if test="expireDateFlag != null">expire_date_flag,</if>
+            <if test="recptDateFlag != null">recpt_date_flag,</if>
+            <if test="vendorFlag != null">vendor_flag,</if>
+            <if test="clientFlag != null">client_flag,</if>
+            <if test="coCodeFlag != null">co_code_flag,</if>
+            <if test="poCodeFlag != null">po_code_flag,</if>
+            <if test="workorderFlag != null">workorder_flag,</if>
+            <if test="taskFlag != null">task_flag,</if>
+            <if test="workstationFlag != null">workstation_flag,</if>
+            <if test="toolFlag != null">tool_flag,</if>
+            <if test="moldFlag != null">mold_flag,</if>
+            <if test="lotNumberFlag != null">lot_number_flag,</if>
+            <if test="qualityStatusFlag != null">quality_status_flag,</if>
+            <if test="enableFlag != null">enable_flag,</if>
+            <if test="remark != null">remark,</if>
+            <if test="attr1 != null">attr1,</if>
+            <if test="attr2 != null">attr2,</if>
+            <if test="attr3 != null">attr3,</if>
+            <if test="attr4 != null">attr4,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="itemId != null">#{itemId},</if>
+            <if test="produceDateFlag != null">#{produceDateFlag},</if>
+            <if test="expireDateFlag != null">#{expireDateFlag},</if>
+            <if test="recptDateFlag != null">#{recptDateFlag},</if>
+            <if test="vendorFlag != null">#{vendorFlag},</if>
+            <if test="clientFlag != null">#{clientFlag},</if>
+            <if test="coCodeFlag != null">#{coCodeFlag},</if>
+            <if test="poCodeFlag != null">#{poCodeFlag},</if>
+            <if test="workorderFlag != null">#{workorderFlag},</if>
+            <if test="taskFlag != null">#{taskFlag},</if>
+            <if test="workstationFlag != null">#{workstationFlag},</if>
+            <if test="toolFlag != null">#{toolFlag},</if>
+            <if test="moldFlag != null">#{moldFlag},</if>
+            <if test="lotNumberFlag != null">#{lotNumberFlag},</if>
+            <if test="qualityStatusFlag != null">#{qualityStatusFlag},</if>
+            <if test="enableFlag != null">#{enableFlag},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="attr1 != null">#{attr1},</if>
+            <if test="attr2 != null">#{attr2},</if>
+            <if test="attr3 != null">#{attr3},</if>
+            <if test="attr4 != null">#{attr4},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateMdItemBatchConfig" parameterType="MdItemBatchConfig">
+        update md_item_batch_config
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="itemId != null">item_id = #{itemId},</if>
+            <if test="produceDateFlag != null">produce_date_flag = #{produceDateFlag},</if>
+            <if test="expireDateFlag != null">expire_date_flag = #{expireDateFlag},</if>
+            <if test="recptDateFlag != null">recpt_date_flag = #{recptDateFlag},</if>
+            <if test="vendorFlag != null">vendor_flag = #{vendorFlag},</if>
+            <if test="clientFlag != null">client_flag = #{clientFlag},</if>
+            <if test="coCodeFlag != null">co_code_flag = #{coCodeFlag},</if>
+            <if test="poCodeFlag != null">po_code_flag = #{poCodeFlag},</if>
+            <if test="workorderFlag != null">workorder_flag = #{workorderFlag},</if>
+            <if test="taskFlag != null">task_flag = #{taskFlag},</if>
+            <if test="workstationFlag != null">workstation_flag = #{workstationFlag},</if>
+            <if test="toolFlag != null">tool_flag = #{toolFlag},</if>
+            <if test="moldFlag != null">mold_flag = #{moldFlag},</if>
+            <if test="lotNumberFlag != null">lot_number_flag = #{lotNumberFlag},</if>
+            <if test="qualityStatusFlag != null">quality_status_flag = #{qualityStatusFlag},</if>
+            <if test="enableFlag != null">enable_flag = #{enableFlag},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="attr1 != null">attr1 = #{attr1},</if>
+            <if test="attr2 != null">attr2 = #{attr2},</if>
+            <if test="attr3 != null">attr3 = #{attr3},</if>
+            <if test="attr4 != null">attr4 = #{attr4},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where config_id = #{configId}
+    </update>
+
+    <delete id="deleteMdItemBatchConfigByConfigId" parameterType="Long">
+        delete from md_item_batch_config where config_id = #{configId}
+    </delete>
+
+    <delete id="deleteMdItemBatchConfigByConfigIds" parameterType="String">
+        delete from md_item_batch_config where config_id in 
+        <foreach item="configId" collection="array" open="(" separator="," close=")">
+            #{configId}
+        </foreach>
+    </delete>
+</mapper>

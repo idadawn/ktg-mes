@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ktg.mes.wm.mapper.WmProductSalesLineMapper">
+    
+    <resultMap type="WmProductSalesLine" id="WmProductSalesLineResult">
+        <result property="lineId"    column="line_id"    />
+        <result property="salesId"    column="sales_id"    />
+        <result property="materialStockId"    column="material_stock_id"    />
+        <result property="itemId"    column="item_id"    />
+        <result property="itemCode"    column="item_code"    />
+        <result property="itemName"    column="item_name"    />
+        <result property="specification"    column="specification"    />
+        <result property="unitOfMeasure"    column="unit_of_measure"    />
+        <result property="unitName" column="unit_name" />
+        <result property="quantitySales"    column="quantity_sales"    />
+        <result property="quantity"    column="quantity"    />
+        <result property="batchId"    column="batch_id"    />
+        <result property="batchCode"    column="batch_code"    />
+        <result property="oqcCheck"  column="oqc_check"></result>
+        <result property="oqcId"  column="oqc_id"></result>
+        <result property="oqcCode"  column="oqc_code"></result>
+        <result property="qualityStatus"  column="quality_status"></result>
+        <result property="remark"    column="remark"    />
+        <result property="attr1"    column="attr1"    />
+        <result property="attr2"    column="attr2"    />
+        <result property="attr3"    column="attr3"    />
+        <result property="attr4"    column="attr4"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <collection columnPrefix="detail_" property="details" javaType="java.util.List" resultMap="detailResult"></collection>
+    </resultMap>
+
+
+    <resultMap type="WmProductSalesDetail" id="detailResult">
+        <result property="detailId"    column="detail_id"    />
+        <result property="lineId"    column="line_id"    />
+        <result property="salesId"    column="sales_id"    />
+        <result property="materialStockId"    column="material_stock_id"    />
+        <result property="itemId"    column="item_id"    />
+        <result property="itemCode"    column="item_code"    />
+        <result property="itemName"    column="item_name"    />
+        <result property="specification"    column="specification"    />
+        <result property="unitOfMeasure"    column="unit_of_measure"    />
+        <result property="unitName"    column="unit_name"    />
+        <result property="quantity"    column="quantity"    />
+        <result property="batchId"    column="batch_id"    />
+        <result property="batchCode"    column="batch_code"    />
+        <result property="warehouseId"    column="warehouse_id"    />
+        <result property="warehouseCode"    column="warehouse_code"    />
+        <result property="warehouseName"    column="warehouse_name"    />
+        <result property="locationId"    column="location_id"    />
+        <result property="locationCode"    column="location_code"    />
+        <result property="locationName"    column="location_name"    />
+        <result property="areaId"    column="area_id"    />
+        <result property="areaCode"    column="area_code"    />
+        <result property="areaName"    column="area_name"    />
+        <result property="remark"    column="remark"    />
+        <result property="attr1"    column="attr1"    />
+        <result property="attr2"    column="attr2"    />
+        <result property="attr3"    column="attr3"    />
+        <result property="attr4"    column="attr4"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectWmProductSalesLineVo">
+        select line_id, sales_id, material_stock_id, item_id, item_code, item_name, specification, unit_of_measure, unit_name, quantity_sales, batch_id, batch_code, oqc_check,oqc_id,oqc_code, quality_status, remark, attr1, attr2, attr3, attr4, create_by, create_time, update_by, update_time from wm_product_sales_line
+    </sql>
+
+    <sql id="selectWmProductSalesLineWithDetailVo">
+        select l.line_id, l.sales_id, l.item_id, l.item_code, l.item_name, l.specification, l.unit_of_measure, l.unit_name, l.quantity_sales, l.batch_id, l.batch_code, l.oqc_check,l.oqc_id,l.oqc_code, l.quality_status, l.remark, l.attr1, l.attr2, l.attr3, l.attr4, l.create_by, l.create_time, l.update_by, l.update_time ,
+               d.detail_id as detail_detail_id, d.line_id as detail_line_id, d.material_stock_id as detail_material_stock_id, d.sales_id as detail_sales_id, d.item_id as detail_item_id, d.item_code as detail_item_code, d.item_name as detail_item_name, d.specification as detail_specification, d.unit_of_measure as detail_unit_of_measure, d.quantity as detail_quantity, d.batch_id as detail_batch_id, d.batch_code as detail_batch_code ,
+               d.warehouse_id as detail_warehouse_id, d.warehouse_code as detail_warehouse_code, d.warehouse_name  as detail_warehouse_name, d.location_id as detail_location_id, d.location_code as detail_location_code, d.location_name as detail_location_name, d.area_id as detail_area_id, d.area_code as detail_area_code, d.area_name as detail_area_name, d.remark as detail_remark, d.attr1 as detail_attr1, d.attr2 as detail_attr2, d.attr3 as detail_attr3, d.attr4 as detail_attr4, d.create_by as detail_create_by, d.create_time as detail_create_time, d.update_by as detail_update_by, d.update_time as detail_update_time
+        from wm_product_sales_line l
+                 left join wm_product_sales_detail d on l.line_id = d.line_id
+    </sql>
+
+    <select id="selectWmProductSalesLineList" parameterType="WmProductSalesLine" resultMap="WmProductSalesLineResult">
+        <include refid="selectWmProductSalesLineVo"/>
+        <where>  
+            <if test="salesId != null "> and sales_id = #{salesId}</if>
+            <if test="materialStockId != null "> and material_stock_id = #{materialStockId}</if>
+            <if test="itemId != null "> and item_id = #{itemId}</if>
+            <if test="itemCode != null  and itemCode != ''"> and item_code = #{itemCode}</if>
+            <if test="itemName != null  and itemName != ''"> and item_name like concat('%', #{itemName}, '%')</if>
+            <if test="specification != null  and specification != ''"> and specification = #{specification}</if>
+            <if test="unitOfMeasure != null  and unitOfMeasure != ''"> and unit_of_measure = #{unitOfMeasure}</if>
+            <if test="unitName != null and unitName != ''">and unit_name = #{unitName}</if>
+            <if test="quantitySales != null "> and quantity_sales = #{quantitySales}</if>
+            <if test="batchId != null "> and batch_id = #{batchId}</if>
+            <if test="batchCode != null  and batchCode != ''"> and batch_code = #{batchCode}</if>
+            <if test="oqcCheck != null "> and oqc_check = #{oqcCheck}</if>
+            <if test="oqcId != null "> and oqc_id = #{oqcId}</if>
+            <if test="oqcCode != null  and oqcCode != ''"> and oqc_code = #{oqcCode}</if>
+            <if test="qualityStatus != null  and qualityStatus != ''"> and quality_status = #{qualityStatus}</if>
+            <if test="remark != null  and remark != ''"> and remark like concat('%', #{remark}, '%')</if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <select id="selectWmProductSalesLineWithQuantityList" parameterType="WmProductSalesLine" resultMap="WmProductSalesLineResult">
+        select l.line_id, l.sales_id, l.item_id, l.item_code, l.item_name, l.specification, l.unit_of_measure, l.unit_name, l.quantity_sales,sum(d.quantity) as quantity, l.batch_id, l.batch_code, l.oqc_check,l.oqc_id,l.oqc_code, l.quality_status, l.remark, l.attr1, l.attr2, l.attr3, l.attr4, l.create_by, l.create_time, l.update_by, l.update_time
+        from wm_product_sales_line l
+        left join wm_product_sales_detail d on l.line_id = d.line_id
+        <where>
+            <if test="salesId != null "> and l.sales_id = #{salesId}</if>
+            <if test="materialStockId != null "> and l.material_stock_id = #{materialStockId}</if>
+            <if test="itemId != null "> and l.item_id = #{itemId}</if>
+            <if test="itemCode != null  and itemCode != ''"> and l.item_code = #{itemCode}</if>
+            <if test="itemName != null  and itemName != ''"> and l.item_name like concat('%', #{itemName}, '%')</if>
+            <if test="specification != null  and specification != ''"> and l.specification = #{specification}</if>
+            <if test="unitOfMeasure != null  and unitOfMeasure != ''"> and l.unit_of_measure = #{unitOfMeasure}</if>
+            <if test="unitName != null and unitName != ''">and l.unit_name = #{unitName}</if>
+            <if test="quantitySales != null "> and l.quantity_sales = #{quantitySales}</if>
+            <if test="batchId != null "> and l.batch_id = #{batchId}</if>
+            <if test="batchCode != null  and batchCode != ''"> and l.batch_code = #{batchCode}</if>
+            <if test="oqcCheck != null "> and l.oqc_check = #{oqcCheck}</if>
+            <if test="oqcId != null "> and l.oqc_id = #{oqcId}</if>
+            <if test="oqcCode != null  and oqcCode != ''"> and l.oqc_code = #{oqcCode}</if>
+            <if test="qualityStatus != null  and qualityStatus != ''"> and l.quality_status = #{qualityStatus}</if>
+            <if test="remark != null  and remark != ''"> and l.remark like concat('%', #{remark}, '%')</if>
+        </where>
+        group by l.line_id, l.sales_id, l.item_id, l.item_code, l.item_name, l.specification, l.unit_of_measure, l.unit_name, l.quantity_sales, l.batch_id, l.batch_code, l.oqc_check,l.oqc_id,l.oqc_code, l.quality_status, l.remark, l.attr1, l.attr2, l.attr3, l.attr4, l.create_by, l.create_time, l.update_by, l.update_time
+        order by l.create_time desc
+    </select>
+
+
+    <select id="selectWmProductSalesLineWithDetailList" parameterType="WmProductSalesLine" resultMap="WmProductSalesLineResult">
+        <include refid="selectWmProductSalesLineWithDetailVo"/>
+        <where>
+            <if test="salesId != null "> and l.sales_id = #{salesId}</if>
+            <if test="materialStockId != null "> and l.material_stock_id = #{materialStockId}</if>
+            <if test="itemId != null "> and l.item_id = #{itemId}</if>
+            <if test="itemCode != null  and itemCode != ''"> and l.item_code = #{itemCode}</if>
+            <if test="itemName != null  and itemName != ''"> and l.item_name like concat('%', #{itemName}, '%')</if>
+            <if test="specification != null  and specification != ''"> and l.specification = #{specification}</if>
+            <if test="unitOfMeasure != null  and unitOfMeasure != ''"> and l.unit_of_measure = #{unitOfMeasure}</if>
+            <if test="unitName != null and unitName != ''">and l.unit_name = #{unitName}</if>
+            <if test="quantitySales != null "> and l.quantity_sales = #{quantitySales}</if>
+            <if test="batchId != null "> and l.batch_id = #{batchId}</if>
+            <if test="batchCode != null  and batchCode != ''"> and l.batch_code = #{batchCode}</if>
+            <if test="oqcCheck != null "> and l.oqc_check = #{oqcCheck}</if>
+            <if test="oqcId != null "> and l.oqc_id = #{oqcId}</if>
+            <if test="oqcCode != null  and oqcCode != ''"> and l.oqc_code = #{oqcCode}</if>
+            <if test="qualityStatus != null  and qualityStatus != ''"> and l.quality_status = #{qualityStatus}</if>
+            <if test="remark != null  and remark != ''"> and l.remark like concat('%', #{remark}, '%')</if>
+        </where>
+        order by create_time desc
+    </select>
+
+
+    <select id="selectWmProductSalesLineByLineId" parameterType="Long" resultMap="WmProductSalesLineResult">
+        <include refid="selectWmProductSalesLineVo"/>
+        where line_id = #{lineId}
+    </select>
+
+    <select id="selectWmProductSalesLineWithQuantityByLineId" parameterType="Long" resultMap="WmProductSalesLineResult">
+        select l.line_id, l.sales_id, l.item_id, l.item_code, l.item_name, l.specification, l.unit_of_measure, l.unit_name, l.quantity_sales,sum(d.quantity) as quantity, l.batch_id, l.batch_code, l.oqc_check,l.oqc_id,l.oqc_code, l.quality_status, l.remark, l.attr1, l.attr2, l.attr3, l.attr4, l.create_by, l.create_time, l.update_by, l.update_time
+        from wm_product_sales_line l
+        left join wm_product_sales_detail d on l.line_id = d.line_id
+        where l.line_id = #{lineId}
+        group by l.line_id, l.sales_id, l.item_id, l.item_code, l.item_name, l.specification, l.unit_of_measure, l.unit_name, l.quantity_sales, l.batch_id, l.batch_code, l.oqc_check,l.oqc_id,l.oqc_code, l.quality_status, l.remark, l.attr1, l.attr2, l.attr3, l.attr4, l.create_by, l.create_time, l.update_by, l.update_time
+        order by l.create_time desc
+    </select>
+
+        
+    <insert id="insertWmProductSalesLine" parameterType="WmProductSalesLine" useGeneratedKeys="true" keyProperty="lineId">
+        insert into wm_product_sales_line
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="salesId != null">sales_id,</if>
+            <if test="materialStockId != null">material_stock_id,</if>
+            <if test="itemId != null">item_id,</if>
+            <if test="itemCode != null">item_code,</if>
+            <if test="itemName != null">item_name,</if>
+            <if test="specification != null">specification,</if>
+            <if test="unitOfMeasure != null">unit_of_measure,</if>
+            <if test="unitName != null and unitName != ''">unit_name,</if>
+            <if test="quantitySales != null">quantity_sales,</if>
+            <if test="batchId != null">batch_id,</if>
+            <if test="batchCode != null">batch_code,</if>
+            <if test="oqcCheck != null">oqc_check,</if>
+            <if test="oqcId != null">oqc_id,</if>
+            <if test="oqcCode != null">oqc_code,</if>
+            <if test="qualityStatus != null">quality_status,</if>
+            <if test="remark != null">remark,</if>
+            <if test="attr1 != null">attr1,</if>
+            <if test="attr2 != null">attr2,</if>
+            <if test="attr3 != null">attr3,</if>
+            <if test="attr4 != null">attr4,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="salesId != null">#{salesId},</if>
+            <if test="materialStockId != null">#{materialStockId},</if>
+            <if test="itemId != null">#{itemId},</if>
+            <if test="itemCode != null">#{itemCode},</if>
+            <if test="itemName != null">#{itemName},</if>
+            <if test="specification != null">#{specification},</if>
+            <if test="unitOfMeasure != null">#{unitOfMeasure},</if>
+            <if test="unitName != null and unitName != ''">#{unitName},</if>
+            <if test="quantitySales != null">#{quantitySales},</if>
+            <if test="batchId != null">#{batchId},</if>
+            <if test="batchCode != null">#{batchCode},</if>
+            <if test="oqcCheck != null">#{oqcCheck},</if>
+            <if test="oqcId != null">#{oqcId},</if>
+            <if test="oqcCode != null">#{oqcCode},</if>
+            <if test="qualityStatus != null">#{qualityStatus},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="attr1 != null">#{attr1},</if>
+            <if test="attr2 != null">#{attr2},</if>
+            <if test="attr3 != null">#{attr3},</if>
+            <if test="attr4 != null">#{attr4},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateWmProductSalesLine" parameterType="WmProductSalesLine">
+        update wm_product_sales_line
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="salesId != null">sales_id = #{salesId},</if>
+            <if test="materialStockId != null">material_stock_id = #{materialStockId},</if>
+            <if test="itemId != null">item_id = #{itemId},</if>
+            <if test="itemCode != null">item_code = #{itemCode},</if>
+            <if test="itemName != null">item_name = #{itemName},</if>
+            <if test="specification != null">specification = #{specification},</if>
+            <if test="unitOfMeasure != null">unit_of_measure = #{unitOfMeasure},</if>
+            <if test="unitName != null and unitName != ''">unit_name = #{unitName},</if>
+            <if test="quantitySales != null">quantity_sales = #{quantitySales},</if>
+            <if test="batchId != null">batch_id = #{batchId},</if>
+            <if test="batchCode != null">batch_code = #{batchCode},</if>
+            <if test="oqcCheck != null">oqc_check = #{oqcCheck},</if>
+            <if test="oqcId != null">oqc_id = #{oqcId},</if>
+            <if test="oqcCode != null">oqc_code = #{oqcCode},</if>
+            <if test="qualityStatus != null">quality_status = #{qualityStatus},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="attr1 != null">attr1 = #{attr1},</if>
+            <if test="attr2 != null">attr2 = #{attr2},</if>
+            <if test="attr3 != null">attr3 = #{attr3},</if>
+            <if test="attr4 != null">attr4 = #{attr4},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where line_id = #{lineId}
+    </update>
+
+    <delete id="deleteWmProductSalesLineByLineId" parameterType="Long">
+        delete from wm_product_sales_line where line_id = #{lineId}
+    </delete>
+
+    <delete id="deleteWmProductSalesLineByLineIds" parameterType="String">
+        delete from wm_product_sales_line where line_id in 
+        <foreach item="lineId" collection="array" open="(" separator="," close=")">
+            #{lineId}
+        </foreach>
+    </delete>
+
+    <delete id="deleteBySalesId" parameterType="Long">
+        delete from wm_product_sales_line where sales_id = #{salesId}
+    </delete>
+</mapper>

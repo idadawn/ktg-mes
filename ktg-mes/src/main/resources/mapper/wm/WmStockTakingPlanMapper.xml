@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ktg.mes.wm.mapper.WmStockTakingPlanMapper">
+    
+    <resultMap type="WmStockTakingPlan" id="WmStockTakingPlanResult">
+        <result property="planId"    column="plan_id"    />
+        <result property="planCode"    column="plan_code"    />
+        <result property="planName"    column="plan_name"    />
+        <result property="takingType"    column="taking_type"    />
+        <result property="startTime"    column="start_time"    />
+        <result property="endTime"    column="end_time"    />
+        <result property="blindFlag"    column="blind_flag"    />
+        <result property="frozenFlag"    column="frozen_flag"    />
+        <result property="enableFlag"    column="enable_flag"    />
+        <result property="dataSql"    column="data_sql"    />
+        <result property="status"    column="status"    />
+        <result property="remark"    column="remark"    />
+        <result property="attr1"    column="attr1"    />
+        <result property="attr2"    column="attr2"    />
+        <result property="attr3"    column="attr3"    />
+        <result property="attr4"    column="attr4"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectWmStockTakingPlanVo">
+        select plan_id, plan_code, plan_name, taking_type, start_time, end_time, blind_flag, frozen_flag, enable_flag, data_sql, status, remark, attr1, attr2, attr3, attr4, create_by, create_time, update_by, update_time from wm_stock_taking_plan
+    </sql>
+
+    <select id="selectWmStockTakingPlanList" parameterType="WmStockTakingPlan" resultMap="WmStockTakingPlanResult">
+        <include refid="selectWmStockTakingPlanVo"/>
+        <where>  
+            <if test="planCode != null  and planCode != ''"> and plan_code = #{planCode}</if>
+            <if test="planName != null  and planName != ''"> and plan_name like concat('%', #{planName}, '%')</if>
+            <if test="takingType != null  and takingType != ''"> and taking_type = #{takingType}</if>
+            <if test="startTime != null "> and start_time = #{startTime}</if>
+            <if test="endTime != null "> and end_time = #{endTime}</if>
+            <if test="blindFlag != null  and blindFlag != ''"> and blind_flag = #{blindFlag}</if>
+            <if test="frozenFlag != null  and frozenFlag != ''"> and frozen_flag = #{frozenFlag}</if>
+            <if test="enableFlag != null  and enableFlag != ''"> and enable_flag = #{enableFlag}</if>
+            <if test="dataSql != null  and dataSql != ''"> and data_sql = #{dataSql}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+        order by create_time desc
+    </select>
+    
+    <select id="selectWmStockTakingPlanByPlanId" parameterType="Long" resultMap="WmStockTakingPlanResult">
+        <include refid="selectWmStockTakingPlanVo"/>
+        where plan_id = #{planId}
+    </select>
+
+    <select id="checkUnique" parameterType="WmStockTakingPlan" resultMap="WmStockTakingPlanResult">
+        <include refid="selectWmStockTakingPlanVo"/>
+        where plan_code = #{planCode}
+    </select>
+        
+    <insert id="insertWmStockTakingPlan" parameterType="WmStockTakingPlan" useGeneratedKeys="true" keyProperty="planId">
+        insert into wm_stock_taking_plan
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="planCode != null and planCode != ''">plan_code,</if>
+            <if test="planName != null">plan_name,</if>
+            <if test="takingType != null and takingType != ''">taking_type,</if>
+            <if test="startTime != null">start_time,</if>
+            <if test="endTime != null">end_time,</if>
+            <if test="blindFlag != null">blind_flag,</if>
+            <if test="frozenFlag != null">frozen_flag,</if>
+            <if test="enableFlag != null">enable_flag,</if>
+            <if test="dataSql != null">data_sql,</if>
+            <if test="status != null">status,</if>
+            <if test="remark != null">remark,</if>
+            <if test="attr1 != null">attr1,</if>
+            <if test="attr2 != null">attr2,</if>
+            <if test="attr3 != null">attr3,</if>
+            <if test="attr4 != null">attr4,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="planCode != null and planCode != ''">#{planCode},</if>
+            <if test="planName != null">#{planName},</if>
+            <if test="takingType != null and takingType != ''">#{takingType},</if>
+            <if test="startTime != null">#{startTime},</if>
+            <if test="endTime != null">#{endTime},</if>
+            <if test="blindFlag != null">#{blindFlag},</if>
+            <if test="frozenFlag != null">#{frozenFlag},</if>
+            <if test="enableFlag != null">#{enableFlag},</if>
+            <if test="dataSql != null">#{dataSql},</if>
+            <if test="status != null">#{status},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="attr1 != null">#{attr1},</if>
+            <if test="attr2 != null">#{attr2},</if>
+            <if test="attr3 != null">#{attr3},</if>
+            <if test="attr4 != null">#{attr4},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateWmStockTakingPlan" parameterType="WmStockTakingPlan">
+        update wm_stock_taking_plan
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="planCode != null and planCode != ''">plan_code = #{planCode},</if>
+            <if test="planName != null">plan_name = #{planName},</if>
+            <if test="takingType != null and takingType != ''">taking_type = #{takingType},</if>
+            start_time = #{startTime},
+            end_time = #{endTime},
+            <if test="blindFlag != null">blind_flag = #{blindFlag},</if>
+            <if test="frozenFlag != null">frozen_flag = #{frozenFlag},</if>
+            <if test="enableFlag != null">enable_flag = #{enableFlag},</if>
+            <if test="dataSql != null">data_sql = #{dataSql},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="attr1 != null">attr1 = #{attr1},</if>
+            <if test="attr2 != null">attr2 = #{attr2},</if>
+            <if test="attr3 != null">attr3 = #{attr3},</if>
+            <if test="attr4 != null">attr4 = #{attr4},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where plan_id = #{planId}
+    </update>
+
+    <delete id="deleteWmStockTakingPlanByPlanId" parameterType="Long">
+        delete from wm_stock_taking_plan where plan_id = #{planId}
+    </delete>
+
+    <delete id="deleteWmStockTakingPlanByPlanIds" parameterType="String">
+        delete from wm_stock_taking_plan where plan_id in 
+        <foreach item="planId" collection="array" open="(" separator="," close=")">
+            #{planId}
+        </foreach>
+    </delete>
+</mapper>

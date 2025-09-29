@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ktg.mes.wm.mapper.WmItemConsumeLineMapper">
+    
+    <resultMap type="WmItemConsumeLine" id="WmItemConsumeLineResult">
+        <result property="lineId"    column="line_id"    />
+        <result property="recordId"    column="record_id"    />
+        <result property="feedbackId"    column="feedback_id"    />
+        <result property="itemId"    column="item_id"    />
+        <result property="itemCode"    column="item_code"    />
+        <result property="itemName"    column="item_name"    />
+        <result property="specification"    column="specification"    />
+        <result property="unitOfMeasure"    column="unit_of_measure"    />
+        <result property="unitName"    column="unit_name"    />
+        <result property="quantityConsume"    column="quantity_consume"    />
+        <result property="batchId"    column="batch_id"    />
+        <result property="batchCode"    column="batch_code"    />
+        <result property="remark"    column="remark"    />
+        <result property="attr1"    column="attr1"    />
+        <result property="attr2"    column="attr2"    />
+        <result property="attr3"    column="attr3"    />
+        <result property="attr4"    column="attr4"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectWmItemConsumeLineVo">
+        select l.line_id, l.record_id, c.feedback_id, l.item_id, l.item_code, l.item_name, l.specification, l.unit_of_measure, l.unit_name, d.quantity as quantity_consume,  d.batch_id, d.batch_code, l.remark, l.attr1, l.attr2, l.attr3, l.attr4, l.create_by, l.create_time, l.update_by, l.update_time
+        from wm_item_consume_line l
+               left join wm_item_consume c on l.record_id = c.record_id
+               left join wm_item_consume_detail d on l.line_id = d.line_id and d.record_id = c.record_id
+    </sql>
+
+    <select id="selectWmItemConsumeLineList" parameterType="WmItemConsumeLine" resultMap="WmItemConsumeLineResult">
+        <include refid="selectWmItemConsumeLineVo"/>
+        <where>  
+            <if test="recordId != null "> and l.record_id = #{recordId}</if>
+            <if test="feedbackId != null "> and c.feedback_id = #{feedbackId}</if>
+            <if test="itemId != null "> and item_id = #{itemId}</if>
+            <if test="itemCode != null  and itemCode != ''"> and item_code = #{itemCode}</if>
+            <if test="itemName != null  and itemName != ''"> and item_name like concat('%', #{itemName}, '%')</if>
+            <if test="specification != null  and specification != ''"> and specification = #{specification}</if>
+            <if test="unitOfMeasure != null  and unitOfMeasure != ''"> and unit_of_measure = #{unitOfMeasure}</if>
+            <if test="unitName != null  and unitName != ''"> and unit_name like concat('%', #{unitName}, '%')</if>
+            <if test="quantityConsume != null "> and quantity_consume = #{quantityConsume}</if>
+            <if test="batchId != null "> and batch_id = #{batchId}</if>
+            <if test="batchCode != null  and batchCode != ''"> and batch_code = #{batchCode}</if>
+        </where>
+    </select>
+    
+    <select id="selectWmItemConsumeLineByLineId" parameterType="Long" resultMap="WmItemConsumeLineResult">
+        <include refid="selectWmItemConsumeLineVo"/>
+        where line_id = #{lineId}
+    </select>
+        
+    <insert id="insertWmItemConsumeLine" parameterType="WmItemConsumeLine" useGeneratedKeys="true" keyProperty="lineId">
+        insert into wm_item_consume_line
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="recordId != null">record_id,</if>
+            <if test="itemId != null">item_id,</if>
+            <if test="itemCode != null">item_code,</if>
+            <if test="itemName != null">item_name,</if>
+            <if test="specification != null">specification,</if>
+            <if test="unitOfMeasure != null">unit_of_measure,</if>
+            <if test="unitName != null" >unit_name,</if>
+            <if test="quantityConsume != null">quantity_consume,</if>
+            <if test="batchId != null">batch_id,</if>
+            <if test="batchCode != null">batch_code,</if>
+            <if test="remark != null">remark,</if>
+            <if test="attr1 != null">attr1,</if>
+            <if test="attr2 != null">attr2,</if>
+            <if test="attr3 != null">attr3,</if>
+            <if test="attr4 != null">attr4,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="recordId != null">#{recordId},</if>
+            <if test="itemId != null">#{itemId},</if>
+            <if test="itemCode != null">#{itemCode},</if>
+            <if test="itemName != null">#{itemName},</if>
+            <if test="specification != null">#{specification},</if>
+            <if test="unitOfMeasure != null">#{unitOfMeasure},</if>
+            <if test="unitName != null">#{unitName},</if>
+            <if test="quantityConsume != null">#{quantityConsume},</if>
+            <if test="batchId != null">#{batchId},</if>
+            <if test="batchCode != null">#{batchCode},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="attr1 != null">#{attr1},</if>
+            <if test="attr2 != null">#{attr2},</if>
+            <if test="attr3 != null">#{attr3},</if>
+            <if test="attr4 != null">#{attr4},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateWmItemConsumeLine" parameterType="WmItemConsumeLine">
+        update wm_item_consume_line
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="recordId != null">record_id = #{recordId},</if>
+            <if test="itemId != null">item_id = #{itemId},</if>
+            <if test="itemCode != null">item_code = #{itemCode},</if>
+            <if test="itemName != null">item_name = #{itemName},</if>
+            <if test="specification != null">specification = #{specification},</if>
+            <if test="unitOfMeasure != null">unit_of_measure = #{unitOfMeasure},</if>
+            <if test="unitName != null">unit_name = #{unitName},</if>
+            <if test="quantityConsume != null">quantity_consume = #{quantityConsume},</if>
+            <if test="batchId != null">batch_id = #{batchId},</if>
+            <if test="batchCode != null">batch_code = #{batchCode},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="attr1 != null">attr1 = #{attr1},</if>
+            <if test="attr2 != null">attr2 = #{attr2},</if>
+            <if test="attr3 != null">attr3 = #{attr3},</if>
+            <if test="attr4 != null">attr4 = #{attr4},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where line_id = #{lineId}
+    </update>
+
+    <delete id="deleteWmItemConsumeLineByLineId" parameterType="Long">
+        delete from wm_item_consume_line where line_id = #{lineId}
+    </delete>
+
+    <delete id="deleteWmItemConsumeLineByLineIds" parameterType="String">
+        delete from wm_item_consume_line where line_id in 
+        <foreach item="lineId" collection="array" open="(" separator="," close=")">
+            #{lineId}
+        </foreach>
+    </delete>
+</mapper>

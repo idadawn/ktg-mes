@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ktg.mes.qc.mapper.QcResultDetailMapper">
+    
+    <resultMap type="QcResultDetail" id="QcResultDetailResult">
+        <result property="detailId"    column="detail_id"    />
+        <result property="resultId"    column="result_id"    />
+        <result property="indexId"    column="index_id"    />
+        <result property="indexCode"    column="index_code"    />
+        <result property="indexName"    column="index_name"    />
+        <result property="indexType"    column="index_type"    />
+        <result property="qcTool"    column="qc_tool"    />
+        <result property="checkMethod"    column="check_method"    />
+        <result property="standerVal"    column="stander_val"    />
+        <result property="unitOfMeasure"    column="unit_of_measure"    />
+        <result property="thresholdMax"    column="threshold_max"    />
+        <result property="thresholdMin"    column="threshold_min"    />
+        <result property="qcResultType"    column="qc_result_type"    />
+        <result property="qcResultSpc"    column="qc_result_spc"    />
+        <result property="qcValFloat"    column="qc_val_float"    />
+        <result property="qcValInteger"    column="qc_val_integer"    />
+        <result property="qcValText"    column="qc_val_text"    />
+        <result property="qcValDict"    column="qc_val_dict"    />
+        <result property="qcValFile"    column="qc_val_file"    />
+        <result property="remark"    column="remark"    />
+        <result property="attr1"    column="attr1"    />
+        <result property="attr2"    column="attr2"    />
+        <result property="attr3"    column="attr3"    />
+        <result property="attr4"    column="attr4"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectQcResultDetailVo">
+        select detail_id, result_id, index_id, index_type, qc_tool, check_method, stander_val, unit_of_measure, threshold_max, threshold_min, qc_result_type, qc_result_spc, qc_val_float, qc_val_integer, qc_val_text, qc_val_dict, qc_val_file, remark, attr1, attr2, attr3, attr4, create_by, create_time, update_by, update_time from qc_result_detail
+    </sql>
+
+    <select id="selectQcResultDetailList" parameterType="QcResultDetail" resultMap="QcResultDetailResult">
+        select qd.detail_id, qd.result_id, qd.index_id, qi.index_code, qi.index_name, qd.index_type, qd.qc_tool, qd.check_method, qd.stander_val, qd.unit_of_measure, qd.threshold_max, qd.threshold_min, qd.qc_result_type, qd.qc_result_spc, qd.qc_val_float, qd.qc_val_integer, qd.qc_val_text, qd.qc_val_dict, qd.qc_val_file, qd.remark, qd.attr1, qd.attr2, qd.attr3, qd.attr4, qd.create_by, qd.create_time, qd.update_by, qd.update_time
+        from qc_result_detail qd
+            left join qc_index qi on qi.index_id = qd.index_id
+        <where>  
+            <if test="resultId != null "> and qd.result_id = #{resultId}</if>
+            <if test="indexId != null "> and qd.index_id = #{indexId}</if>
+            <if test="indexType != null  and indexType != ''"> and qd.index_type = #{indexType}</if>
+            <if test="qcTool != null  and qcTool != ''"> and qd.qc_tool = #{qcTool}</if>
+            <if test="checkMethod != null  and checkMethod != ''"> and qd.check_method = #{checkMethod}</if>
+            <if test="standerVal != null "> and qd.stander_val = #{standerVal}</if>
+            <if test="unitOfMeasure != null  and unitOfMeasure != ''"> and qd.unit_of_measure = #{unitOfMeasure}</if>
+            <if test="thresholdMax != null "> and qd.threshold_max = #{thresholdMax}</if>
+            <if test="thresholdMin != null "> and qd.threshold_min = #{thresholdMin}</if>
+            <if test="qcResultType != null  and qcResultType != ''"> and qd.qc_result_type = #{qcResultType}</if>
+            <if test="qcResultSpc != null  and qcResultSpc != ''"> and qd.qc_result_spc = #{qcResultSpc}</if>
+            <if test="qcValFloat != null "> and qd.qc_val_float = #{qcValFloat}</if>
+            <if test="qcValInteger != null "> and qd.qc_val_integer = #{qcValInteger}</if>
+            <if test="qcValText != null  and qcValText != ''"> and qd.qc_val_text = #{qcValText}</if>
+            <if test="qcValDict != null  and qcValDict != ''"> and qd.qc_val_dict = #{qcValDict}</if>
+            <if test="qcValFile != null  and qcValFile != ''"> and qd.qc_val_file = #{qcValFile}</if>
+        </where>
+        order by qd.index_id asc
+    </select>
+
+    <select id="selectQcResultDetailByResultIdAndIQCId" parameterType="QcResultDetail" resultMap="QcResultDetailResult">
+        select detail_id, result_id, ql.index_id, ql.index_code, ql.index_name, ql.index_type, ql.qc_tool, ql.check_method, ql.stander_val, ql.unit_of_measure, ql.threshold_max, ql.threshold_min, qi.qc_result_type, qi.qc_result_spc, d.qc_val_float, d.qc_val_integer, d.qc_val_text, d.qc_val_dict, d.qc_val_file, d.remark, d.create_by, d.create_time, d.update_by, d.update_time
+        from qc_iqc_line ql
+                 left join qc_index qi
+                           on ql.index_id = qi.index_id
+                 left join qc_result_detail d
+        <choose>
+            <when test="resultId !=null " >
+                on qi.index_id = d.index_id and d.result_id = #{resultId}
+            </when>
+            <otherwise>
+                on qi.index_id = d.index_id and d.result_id = -1
+            </otherwise>
+         </choose>
+        where 1=1
+          and ql.iqc_id = #{qcId}
+        order by qi.index_id asc
+    </select>
+
+    <select id="selectQcResultDetailByResultIdAndIPQCId" parameterType="QcResultDetail" resultMap="QcResultDetailResult">
+        select detail_id, result_id, ql.index_id, ql.index_code, ql.index_name, ql.index_type, ql.qc_tool, ql.check_method, ql.stander_val, ql.unit_of_measure, ql.threshold_max, ql.threshold_min, qi.qc_result_type, qi.qc_result_spc, d.qc_val_float, d.qc_val_integer, d.qc_val_text, d.qc_val_dict, d.qc_val_file, d.remark, d.create_by, d.create_time, d.update_by, d.update_time
+        from qc_ipqc_line ql
+        left join qc_index qi
+        on ql.index_id = qi.index_id
+        left join qc_result_detail d
+        <choose>
+            <when test="resultId !=null " >
+                on qi.index_id = d.index_id and d.result_id = #{resultId}
+            </when>
+            <otherwise>
+                on qi.index_id = d.index_id and d.result_id = -1
+            </otherwise>
+        </choose>
+        where 1=1
+        and ql.ipqc_id = #{qcId}
+        order by qi.index_id asc
+    </select>
+
+    <select id="selectQcResultDetailByResultIdAndOQCId" parameterType="QcResultDetail" resultMap="QcResultDetailResult">
+        select detail_id, result_id, ql.index_id, ql.index_code, ql.index_name, ql.index_type, ql.qc_tool, ql.check_method, ql.stander_val, ql.unit_of_measure, ql.threshold_max, ql.threshold_min, qi.qc_result_type, qi.qc_result_spc, d.qc_val_float, d.qc_val_integer, d.qc_val_text, d.qc_val_dict, d.qc_val_file, d.remark, d.create_by, d.create_time, d.update_by, d.update_time
+        from qc_oqc_line ql
+        left join qc_index qi
+        on ql.index_id = qi.index_id
+        left join qc_result_detail d
+        <choose>
+            <when test="resultId !=null " >
+                on qi.index_id = d.index_id and d.result_id = #{resultId}
+            </when>
+            <otherwise>
+                on qi.index_id = d.index_id and d.result_id = -1
+            </otherwise>
+        </choose>
+        where 1=1
+        and ql.oqc_id = #{qcId}
+        order by qi.index_id asc
+    </select>
+
+    <select id="selectQcResultDetailByResultIdAndRQCId" parameterType="QcResultDetail" resultMap="QcResultDetailResult">
+        select detail_id, result_id, ql.index_id, ql.index_code, ql.index_name, ql.index_type, ql.qc_tool, ql.check_method, ql.stander_val, ql.unit_of_measure, ql.threshold_max, ql.threshold_min, qi.qc_result_type, qi.qc_result_spc, d.qc_val_float, d.qc_val_integer, d.qc_val_text, d.qc_val_dict, d.qc_val_file, d.remark, d.create_by, d.create_time, d.update_by, d.update_time
+        from qc_rqc_line ql
+        left join qc_index qi
+        on ql.index_id = qi.index_id
+        left join qc_result_detail d
+        <choose>
+            <when test="resultId !=null " >
+                on qi.index_id = d.index_id and d.result_id = #{resultId}
+            </when>
+            <otherwise>
+                on qi.index_id = d.index_id and d.result_id = -1
+            </otherwise>
+        </choose>
+        where 1=1
+        and ql.rqc_id = #{qcId}
+        order by qi.index_id asc
+    </select>
+
+
+
+    <select id="selectQcResultDetailByDetailId" parameterType="Long" resultMap="QcResultDetailResult">
+        <include refid="selectQcResultDetailVo"/>
+        where detail_id = #{detailId}
+    </select>
+        
+    <insert id="insertQcResultDetail" parameterType="QcResultDetail" useGeneratedKeys="true" keyProperty="detailId">
+        insert into qc_result_detail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="resultId != null">result_id,</if>
+            <if test="indexId != null">index_id,</if>
+            <if test="indexType != null">index_type,</if>
+            <if test="qcTool != null">qc_tool,</if>
+            <if test="checkMethod != null">check_method,</if>
+            <if test="standerVal != null">stander_val,</if>
+            <if test="unitOfMeasure != null">unit_of_measure,</if>
+            <if test="thresholdMax != null">threshold_max,</if>
+            <if test="thresholdMin != null">threshold_min,</if>
+            <if test="qcResultType != null and qcResultType != ''">qc_result_type,</if>
+            <if test="qcResultSpc != null">qc_result_spc,</if>
+            <if test="qcValFloat != null">qc_val_float,</if>
+            <if test="qcValInteger != null">qc_val_integer,</if>
+            <if test="qcValText != null">qc_val_text,</if>
+            <if test="qcValDict != null">qc_val_dict,</if>
+            <if test="qcValFile != null">qc_val_file,</if>
+            <if test="remark != null">remark,</if>
+            <if test="attr1 != null">attr1,</if>
+            <if test="attr2 != null">attr2,</if>
+            <if test="attr3 != null">attr3,</if>
+            <if test="attr4 != null">attr4,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="resultId != null">#{resultId},</if>
+            <if test="indexId != null">#{indexId},</if>
+            <if test="indexType != null">#{indexType},</if>
+            <if test="qcTool != null">#{qcTool},</if>
+            <if test="checkMethod != null">#{checkMethod},</if>
+            <if test="standerVal != null">#{standerVal},</if>
+            <if test="unitOfMeasure != null">#{unitOfMeasure},</if>
+            <if test="thresholdMax != null">#{thresholdMax},</if>
+            <if test="thresholdMin != null">#{thresholdMin},</if>
+            <if test="qcResultType != null and qcResultType != ''">#{qcResultType},</if>
+            <if test="qcResultSpc != null">#{qcResultSpc},</if>
+            <if test="qcValFloat != null">#{qcValFloat},</if>
+            <if test="qcValInteger != null">#{qcValInteger},</if>
+            <if test="qcValText != null">#{qcValText},</if>
+            <if test="qcValDict != null">#{qcValDict},</if>
+            <if test="qcValFile != null">#{qcValFile},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="attr1 != null">#{attr1},</if>
+            <if test="attr2 != null">#{attr2},</if>
+            <if test="attr3 != null">#{attr3},</if>
+            <if test="attr4 != null">#{attr4},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateQcResultDetail" parameterType="QcResultDetail">
+        update qc_result_detail
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="resultId != null">result_id = #{resultId},</if>
+            <if test="indexId != null">index_id = #{indexId},</if>
+            <if test="indexType != null">index_type = #{indexType},</if>
+            <if test="qcTool != null">qc_tool = #{qcTool},</if>
+            <if test="checkMethod != null">check_method = #{checkMethod},</if>
+            <if test="standerVal != null">stander_val = #{standerVal},</if>
+            <if test="unitOfMeasure != null">unit_of_measure = #{unitOfMeasure},</if>
+            <if test="thresholdMax != null">threshold_max = #{thresholdMax},</if>
+            <if test="thresholdMin != null">threshold_min = #{thresholdMin},</if>
+            <if test="qcResultType != null and qcResultType != ''">qc_result_type = #{qcResultType},</if>
+            <if test="qcResultSpc != null">qc_result_spc = #{qcResultSpc},</if>
+            <if test="qcValFloat != null">qc_val_float = #{qcValFloat},</if>
+            <if test="qcValInteger != null">qc_val_integer = #{qcValInteger},</if>
+            <if test="qcValText != null">qc_val_text = #{qcValText},</if>
+            <if test="qcValDict != null">qc_val_dict = #{qcValDict},</if>
+            <if test="qcValFile != null">qc_val_file = #{qcValFile},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="attr1 != null">attr1 = #{attr1},</if>
+            <if test="attr2 != null">attr2 = #{attr2},</if>
+            <if test="attr3 != null">attr3 = #{attr3},</if>
+            <if test="attr4 != null">attr4 = #{attr4},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where detail_id = #{detailId}
+    </update>
+
+    <delete id="deleteQcResultDetailByDetailId" parameterType="Long">
+        delete from qc_result_detail where detail_id = #{detailId}
+    </delete>
+
+    <delete id="deleteQcResultDetailByDetailIds" parameterType="String">
+        delete from qc_result_detail where detail_id in 
+        <foreach item="detailId" collection="array" open="(" separator="," close=")">
+            #{detailId}
+        </foreach>
+    </delete>
+
+    <delete id="deleteQcResultDetailByResultId" parameterType="Long">
+        delete from qc_result_detail where result_id = #{resultId}
+    </delete>
+
+</mapper>

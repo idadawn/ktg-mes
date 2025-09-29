@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ktg.mes.pro.mapper.ProRouteProcessMapper">
+    
+    <resultMap type="ProRouteProcess" id="ProRouteProcessResult">
+        <result property="recordId"    column="record_id"    />
+        <result property="routeId"    column="route_id"    />
+        <result property="processId"    column="process_id"    />
+        <result property="processCode"    column="process_code"    />
+        <result property="processName"    column="process_name"    />
+        <result property="orderNum"    column="order_num"    />
+        <result property="nextProcessId"    column="next_process_id"    />
+        <result property="nextProcessCode"    column="next_process_code"    />
+        <result property="nextProcessName"    column="next_process_name"    />
+        <result property="linkType"    column="link_type"    />
+        <result property="defaultPreTime"    column="default_pre_time"    />
+        <result property="defaultSufTime"    column="default_suf_time"    />
+        <result property="colorCode"    column="color_code"    />
+        <result property="keyFlag" column="key_flag" ></result>
+        <result property="isCheck" column="is_check" ></result>
+        <result property="remark"    column="remark"    />
+        <result property="attr1"    column="attr1"    />
+        <result property="attr2"    column="attr2"    />
+        <result property="attr3"    column="attr3"    />
+        <result property="attr4"    column="attr4"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectProRouteProcessVo">
+        select record_id, route_id, process_id, process_code, process_name, order_num, next_process_id, next_process_code, next_process_name, link_type, default_pre_time, default_suf_time, color_code,key_flag,is_check, remark, attr1, attr2, attr3, attr4, create_by, create_time, update_by, update_time from pro_route_process
+    </sql>
+
+
+    <select id="selectProRouteProcessList" parameterType="ProRouteProcess" resultMap="ProRouteProcessResult">
+        <include refid="selectProRouteProcessVo"/>
+        <where>  
+            <if test="routeId != null "> and route_id = #{routeId}</if>
+            <if test="processId != null "> and process_id = #{processId}</if>
+            <if test="processCode != null  and processCode != ''"> and process_code = #{processCode}</if>
+            <if test="processName != null  and processName != ''"> and process_name like concat('%', #{processName}, '%')</if>
+            <if test="orderNum != null "> and order_num = #{orderNum}</if>
+            <if test="nextProcessId != null "> and next_process_id = #{nextProcessId}</if>
+            <if test="nextProcessCode != null  and nextProcessCode != ''"> and next_process_code = #{nextProcessCode}</if>
+            <if test="nextProcessName != null  and nextProcessName != ''"> and next_process_name like concat('%', #{nextProcessName}, '%')</if>
+            <if test="linkType != null  and linkType != ''"> and link_type = #{linkType}</if>
+            <if test="defaultPreTime != null "> and default_pre_time = #{defaultPreTime}</if>
+            <if test="defaultSufTime != null "> and default_suf_time = #{defaultSufTime}</if>
+            <if test="colorCode != null  and colorCode != ''"> and color_code = #{colorCode}</if>
+            <if test="keyFlag !=null and keyFlag !=''"> and key_flag = #{keyFlag}</if>
+            <if test="isCheck !=null and isCheck !=''"> and is_check = #{isCheck}</if>
+        </where>
+        order by order_num asc
+    </select>
+    
+    <select id="selectProRouteProcessByRecordId" parameterType="Long" resultMap="ProRouteProcessResult">
+        <include refid="selectProRouteProcessVo"/>
+        where record_id = #{recordId}
+    </select>
+
+    <select id="checkOrderNumExists" parameterType="ProRouteProcess" resultMap="ProRouteProcessResult">
+        <include refid="selectProRouteProcessVo"/>
+        where route_id = #{routeId} and order_num = #{orderNum} limit 1
+    </select>
+
+    <select id="checkProcessExists" parameterType="ProRouteProcess" resultMap="ProRouteProcessResult">
+        <include refid="selectProRouteProcessVo"/>
+        where route_id = #{routeId} and process_id = #{processId} limit 1
+    </select>
+
+    <select id="checkUpdateFlagUnique" parameterType="ProRouteProcess" resultMap="ProRouteProcessResult">
+        <include refid="selectProRouteProcessVo"/>
+        where route_id = #{routeId} and key_flag = 'Y' limit 1
+    </select>
+
+    <select id="findPreProcess" parameterType="ProRouteProcess" resultMap="ProRouteProcessResult">
+        <include refid="selectProRouteProcessVo"/>
+        where route_id = #{routeId}
+        <choose>
+            <when test="orderNum != null "> and order_num &lt; #{orderNum}</when>
+            <otherwise>
+                AND order_num &lt; (
+                    SELECT order_num
+                    FROM pro_route_process
+                    WHERE route_id = #{routeId} limit 1
+                )
+            </otherwise>
+        </choose>
+        ORDER BY order_num DESC LIMIT 1
+    </select>
+
+    <select id="findNextProcess" parameterType="ProRouteProcess" resultMap="ProRouteProcessResult">
+        <include refid="selectProRouteProcessVo"/>
+        where route_id = #{routeId}
+        <choose>
+            <when test="orderNum != null "> and order_num &gt; #{orderNum}</when>
+            <otherwise>
+                AND order_num &gt; (
+                SELECT order_num
+                FROM pro_route_process
+                WHERE route_id = #{routeId} limit 1
+                )
+            </otherwise>
+        </choose>
+        ORDER BY order_num ASC LIMIT 1
+    </select>
+    <select id="selectByRecordId" resultType="ProRouteProcess" resultMap="ProRouteProcessResult">
+        select * from pro_route_process where record_id = #{recordIds}
+    </select>
+    <select id="selectByRouteId" resultType="ProRouteProcess" resultMap="ProRouteProcessResult">
+        select * from pro_route_process where route_id = #{routeId}
+    </select>
+    <select id="selectByProcessIds" resultType="com.ktg.mes.pro.domain.ProRouteProcess" resultMap="ProRouteProcessResult">
+        select * from pro_route_process
+        where process_id in 
+        <foreach collection="entity" item="item" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+    </select>
+    <select id="selectByRouteIds" resultType="com.ktg.mes.pro.domain.ProRouteProcess" resultMap="ProRouteProcessResult">
+        <include refid="selectProRouteProcessVo"/>
+        where route_id in
+            <foreach collection="routeIds" item="item" separator="," open="(" close=")">
+                #{item}
+            </foreach>
+    </select>
+
+    <insert id="insertProRouteProcess" parameterType="ProRouteProcess" useGeneratedKeys="true" keyProperty="recordId">
+        insert into pro_route_process
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="routeId != null">route_id,</if>
+            <if test="processId != null">process_id,</if>
+            <if test="processCode != null">process_code,</if>
+            <if test="processName != null">process_name,</if>
+            <if test="orderNum != null">order_num,</if>
+            <if test="nextProcessId != null">next_process_id,</if>
+            <if test="nextProcessCode != null">next_process_code,</if>
+            <if test="nextProcessName != null">next_process_name,</if>
+            <if test="linkType != null">link_type,</if>
+            <if test="defaultPreTime != null">default_pre_time,</if>
+            <if test="defaultSufTime != null">default_suf_time,</if>
+            <if test="colorCode != null">color_code,</if>
+            <if test="keyFlag !=null">key_flag,</if>
+            <if test="isCheck !=null">is_check,</if>
+            <if test="remark != null">remark,</if>
+            <if test="attr1 != null">attr1,</if>
+            <if test="attr2 != null">attr2,</if>
+            <if test="attr3 != null">attr3,</if>
+            <if test="attr4 != null">attr4,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="routeId != null">#{routeId},</if>
+            <if test="processId != null">#{processId},</if>
+            <if test="processCode != null">#{processCode},</if>
+            <if test="processName != null">#{processName},</if>
+            <if test="orderNum != null">#{orderNum},</if>
+            <if test="nextProcessId != null">#{nextProcessId},</if>
+            <if test="nextProcessCode != null">#{nextProcessCode},</if>
+            <if test="nextProcessName != null">#{nextProcessName},</if>
+            <if test="linkType != null">#{linkType},</if>
+            <if test="defaultPreTime != null">#{defaultPreTime},</if>
+            <if test="defaultSufTime != null">#{defaultSufTime},</if>
+            <if test="colorCode != null">#{colorCode},</if>
+            <if test="keyFlag !=null">#{keyFlag},</if>
+            <if test="isCheck !=null">#{isCheck},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="attr1 != null">#{attr1},</if>
+            <if test="attr2 != null">#{attr2},</if>
+            <if test="attr3 != null">#{attr3},</if>
+            <if test="attr4 != null">#{attr4},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateProRouteProcess" parameterType="ProRouteProcess">
+        update pro_route_process
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="routeId != null">route_id = #{routeId},</if>
+            <if test="processId != null">process_id = #{processId},</if>
+            <if test="processCode != null">process_code = #{processCode},</if>
+            <if test="processName != null">process_name = #{processName},</if>
+            <if test="orderNum != null">order_num = #{orderNum},</if>
+            <if test="nextProcessId != null">next_process_id = #{nextProcessId},</if>
+            <if test="nextProcessCode != null">next_process_code = #{nextProcessCode},</if>
+            <if test="nextProcessName != null">next_process_name = #{nextProcessName},</if>
+            <if test="linkType != null">link_type = #{linkType},</if>
+            <if test="defaultPreTime != null">default_pre_time = #{defaultPreTime},</if>
+            <if test="defaultSufTime != null">default_suf_time = #{defaultSufTime},</if>
+            <if test="keyFlag !=null">key_flag = #{keyFlag},</if>
+            <if test="isCheck !=null">is_check = #{isCheck},</if>
+            <if test="colorCode != null">color_code = #{colorCode},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="attr1 != null">attr1 = #{attr1},</if>
+            <if test="attr2 != null">attr2 = #{attr2},</if>
+            <if test="attr3 != null">attr3 = #{attr3},</if>
+            <if test="attr4 != null">attr4 = #{attr4},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where record_id = #{recordId}
+    </update>
+    <update id="updateBatch">
+        <foreach collection="entity" item="item" separator=";">
+            update pro_route_process
+            <trim prefix="SET" suffixOverrides=",">
+                <if test="item.routeId != null">route_id = #{item.routeId},</if>
+                <if test="item.processId != null">process_id = #{item.processId},</if>
+                <if test="item.processCode != null">process_code = #{item.processCode},</if>
+                <if test="item.processName != null">process_name = #{item.processName},</if>
+                <if test="item.orderNum != null">order_num = #{item.orderNum},</if>
+                <if test="item.nextProcessId != null">next_process_id = #{item.nextProcessId},</if>
+                <if test="item.nextProcessCode != null">next_process_code = #{item.nextProcessCode},</if>
+                <if test="item.nextProcessName != null">next_process_name = #{item.nextProcessName},</if>
+                <if test="item.linkType != null">link_type = #{item.linkType},</if>
+                <if test="item.defaultPreTime != null">default_pre_time = #{item.defaultPreTime},</if>
+                <if test="item.defaultSufTime != null">default_suf_time = #{item.defaultSufTime},</if>
+                <if test="item.keyFlag !=null">key_flag = #{item.keyFlag},</if>
+                <if test="item.isCheck !=null">is_check = #{item.isCheck},</if>
+                <if test="item.colorCode != null">color_code = #{item.colorCode},</if>
+                <if test="item.remark != null">remark = #{item.remark},</if>
+                <if test="item.attr1 != null">attr1 = #{item.attr1},</if>
+                <if test="item.attr2 != null">attr2 = #{item.attr2},</if>
+                <if test="item.attr3 != null">attr3 = #{item.attr3},</if>
+                <if test="item.attr4 != null">attr4 = #{item.attr4},</if>
+                <if test="item.createBy != null">create_by = #{item.createBy},</if>
+                <if test="item.createTime != null">create_time = #{item.createTime},</if>
+                <if test="item.updateBy != null">update_by = #{item.updateBy},</if>
+                <if test="item.updateTime != null">update_time = #{item.updateTime},</if>
+            </trim>
+            where record_id = #{item.recordId}
+        </foreach>
+    </update>
+
+    <delete id="deleteProRouteProcessByRecordId" parameterType="Long">
+        delete from pro_route_process where record_id = #{recordId}
+    </delete>
+
+    <delete id="deleteProRouteProcessByRecordIds" parameterType="String">
+        delete from pro_route_process where record_id in 
+        <foreach item="recordId" collection="array" open="(" separator="," close=")">
+            #{recordId}
+        </foreach>
+    </delete>
+
+    <delete id="deleteByRouteId" parameterType="Long">
+        delete from pro_route_process where route_id = #{routeId}
+    </delete>
+
+</mapper>

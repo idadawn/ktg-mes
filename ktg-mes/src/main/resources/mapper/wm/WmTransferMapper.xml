@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ktg.mes.wm.mapper.WmTransferMapper">
+    
+    <resultMap type="WmTransfer" id="WmTransferResult">
+        <result property="transferId"    column="transfer_id"    />
+        <result property="transferCode"    column="transfer_code"    />
+        <result property="transferName"    column="transfer_name"    />
+        <result property="transferType"    column="transfer_type"    />
+        <result property="deliveryFlag"    column="delivery_flag"    />
+        <result property="recipient"    column="recipient"    />
+        <result property="tel"    column="tel"    />
+        <result property="destination"    column="destination"    />
+        <result property="carrier"    column="carrier"    />
+        <result property="shippingNumber" column="shipping_number" />
+        <result property="confirmFlag"    column="confirm_flag"    />
+        <result property="transferDate"    column="transfer_date"    />
+        <result property="status"    column="status"    />
+        <result property="remark"    column="remark"    />
+        <result property="attr1"    column="attr1"    />
+        <result property="attr2"    column="attr2"    />
+        <result property="attr3"    column="attr3"    />
+        <result property="attr4"    column="attr4"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <resultMap id="TransferTxBeanResult" type="TransferTxBean">
+        <result property="materialStockId" column="material_stock_id" ></result>
+        <result property="itemId" column="item_id"></result>
+        <result property="itemCode" column="item_code"></result>
+        <result property="itemName" column="item_name"></result>
+        <result property="specification" column="specification"></result>
+        <result property="unitOfMeasure" column="unit_of_measure"></result>
+        <result property="unitName" column="unit_name"></result>
+        <result property="batchId" column="batch_id"></result>
+        <result property="batchCode" column="batch_code"></result>
+        <result property="fromWarehouseId" column="from_warehouse_id"></result>
+        <result property="fromWarehouseCode" column="from_warehouse_code"></result>
+        <result property="fromWarehouseName" column="from_warehouse_name"></result>
+        <result property="fromLocationId" column="from_location_id"></result>
+        <result property="fromLocationCode" column="from_location_code"></result>
+        <result property="fromLocationName" column="from_location_name"></result>
+        <result property="fromAreaId" column="from_area_id"></result>
+        <result property="fromAreaCode" column="from_area_code"></result>
+        <result property="fromAreaName" column="from_area_name"></result>
+        <result property="toWarehouseId" column="to_warehouse_id"></result>
+        <result property="toWarehouseCode" column="to_warehouse_code"></result>
+        <result property="toWarehouseName" column="to_warehouse_name"></result>
+        <result property="toLocationId" column="to_location_id"></result>
+        <result property="toLocationCode" column="to_location_code"></result>
+        <result property="toLocationName" column="to_location_name"></result>
+        <result property="toAreaId" column="to_area_id"></result>
+        <result property="toAreaCode" column="to_area_code"></result>
+        <result property="toAreaName" column="to_area_name"></result>
+        <result property="sourceDocType" column="source_doc_type"></result>
+        <result property="sourceDocId" column="source_doc_id"></result>
+        <result property="sourceDocCode" column="source_doc_code"></result>
+        <result property="sourceDocLineId" column="source_doc_line_id"></result>
+        <result property="transactionQuantity" column="transaction_quantity"></result>
+        <result property="recptDate" column="recpt_date"></result>
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectWmTransferVo">
+        select transfer_id, transfer_code, transfer_name, transfer_type, delivery_flag, recipient, tel, destination, carrier, shipping_number, confirm_flag, transfer_date, status, remark, attr1, attr2, attr3, attr4, create_by, create_time, update_by, update_time from wm_transfer
+    </sql>
+
+    <select id="selectWmTransferList" parameterType="WmTransfer" resultMap="WmTransferResult">
+        <include refid="selectWmTransferVo"/>
+        <where>  
+            <if test="transferCode != null  and transferCode != ''"> and transfer_code = #{transferCode}</if>
+            <if test="transferName != null  and transferName != ''"> and transfer_name like concat('%', #{transferName}, '%')</if>
+            <if test="transferType != null  and transferType != ''"> and transfer_type = #{transferType}</if>
+            <if test="deliveryFlag != null  and deliveryFlag != ''"> and delivery_flag = #{deliveryFlag}</if>
+            <if test="recipient != null  and recipient != ''"> and recipient = #{recipient}</if>
+            <if test="tel != null  and tel != ''"> and tel = #{tel}</if>
+            <if test="destination != null  and destination != ''"> and destination = #{destination}</if>
+            <if test="carrier != null  and carrier != ''"> and carrier = #{carrier}</if>
+            <if test="shippingNumber != null  and shippingNumber != ''"> and shipping_number = #{shippingNumber}</if>
+            <if test="confirmFlag != null  and confirmFlag != ''"> and confirm_flag = #{confirmFlag}</if>
+            <if test="transferDate != null "> and transfer_date = #{transferDate}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+        order by create_time desc
+    </select>
+    
+    <select id="selectWmTransferByTransferId" parameterType="Long" resultMap="WmTransferResult">
+        <include refid="selectWmTransferVo"/>
+        where transfer_id = #{transferId}
+    </select>
+
+    <select id="checkUnique" parameterType="WmTransfer" resultMap="WmTransferResult">
+        <include refid="selectWmTransferVo"/>
+        where transfer_code = #{transferCode}
+    </select>
+
+    <select id="getTxBeans" parameterType="Long" resultMap="TransferTxBeanResult">
+        SELECT irl.material_stock_id,
+               irl.`item_id`,
+               irl.`item_code`,
+               irl.`item_name`,
+               irl.`specification`,
+               irl.`unit_of_measure`,
+               irl.`unit_name`,
+               irl.`batch_id`,
+               irl.`batch_code`,
+               ms.warehouse_id as from_warehouse_id,
+               ms.warehouse_code as from_warehouse_code,
+               ms.warehouse_name as from_warehouse_name,
+               ms.location_id as from_location_id,
+               ms.location_code as from_location_code,
+               ms.location_name as from_location_name,
+               ms.area_id as from_area_id,
+               ms.area_code as from_area_code,
+               ms.area_name as from_area_name,
+               ird.warehouse_id as to_warehouse_id,
+               ird.warehouse_code as to_warehouse_code,
+               ird.warehouse_name as to_warehouse_name,
+               ird.location_id as to_location_id,
+               ird.location_code as to_location_code,
+               ird.location_name as to_location_name,
+               ird.area_id as to_area_id,
+               ird.area_code as to_area_code,
+               ird.area_name as to_area_name,
+               'TRANSFER' AS source_doc_type,ir.`transfer_id` AS source_doc_id,
+               ir.`transfer_code` AS source_doc_code,
+               irl.`line_id` AS source_doc_line_id,
+               ird.quantity AS transaction_quantity,
+               ir.transfer_date as recpt_date
+        FROM wm_transfer ir
+                 LEFT JOIN wm_transfer_line irl
+                           ON ir.transfer_id = irl.transfer_id
+                 left join wm_transfer_detail ird
+                           on irl.line_id = ird.line_id and ird.transfer_id = ir.transfer_id
+                 left join wm_material_stock ms
+                           on irl.material_stock_id = ms.material_stock_id
+        WHERE ir.transfer_id = #{transferId}
+    </select>
+
+    <insert id="insertWmTransfer" parameterType="WmTransfer" useGeneratedKeys="true" keyProperty="transferId">
+        insert into wm_transfer
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="transferCode != null and transferCode != ''">transfer_code,</if>
+            <if test="transferName != null and transferName != ''">transfer_name,</if>
+            <if test="transferType != null and transferType != ''">transfer_type,</if>
+            <if test="deliveryFlag != null and deliveryFlag != ''">delivery_flag,</if>
+            <if test="recipient != null and recipient != ''">recipient,</if>
+            <if test="tel != null and tel != ''">tel,</if>
+            <if test="destination != null">destination,</if>
+            <if test="carrier != null">carrier,</if>
+            <if test="shippingNumber != null">shipping_number,</if>
+            <if test="confirmFlag != null and confirmFlag != ''">confirm_flag,</if>
+            <if test="transferDate != null">transfer_date,</if>
+            <if test="status != null">status,</if>
+            <if test="remark != null">remark,</if>
+            <if test="attr1 != null">attr1,</if>
+            <if test="attr2 != null">attr2,</if>
+            <if test="attr3 != null">attr3,</if>
+            <if test="attr4 != null">attr4,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="transferCode != null and transferCode != ''">#{transferCode},</if>
+            <if test="transferName != null and transferName != ''">#{transferName},</if>
+            <if test="transferType != null and transferType != ''">#{transferType},</if>
+            <if test="deliveryFlag != null and deliveryFlag != ''">#{deliveryFlag},</if>
+            <if test="recipient != null and recipient != ''">#{recipient},</if>
+            <if test="tel != null and tel != ''">#{tel},</if>
+            <if test="destination != null">#{destination},</if>
+            <if test="carrier != null">#{carrier},</if>
+            <if test="shippingNumber != null">#{shippingNumber},</if>
+            <if test="confirmFlag != null and confirmFlag != ''">#{confirmFlag},</if>
+            <if test="transferDate != null">#{transferDate},</if>
+            <if test="status != null">#{status},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="attr1 != null">#{attr1},</if>
+            <if test="attr2 != null">#{attr2},</if>
+            <if test="attr3 != null">#{attr3},</if>
+            <if test="attr4 != null">#{attr4},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateWmTransfer" parameterType="WmTransfer">
+        update wm_transfer
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="transferCode != null and transferCode != ''">transfer_code = #{transferCode},</if>
+            <if test="transferName != null and transferName != ''">transfer_name = #{transferName},</if>
+            <if test="transferType != null and transferType != ''">transfer_type = #{transferType},</if>
+            <if test="deliveryFlag != null and deliveryFlag != ''">delivery_flag = #{deliveryFlag},</if>
+            <if test="recipient != null and recipient != ''">recipient = #{recipient},</if>
+            <if test="tel != null and tel != ''">tel = #{tel},</if>
+            <if test="destination != null">destination = #{destination},</if>
+            <if test="carrier != null">carrier = #{carrier},</if>
+            <if test="shippingNumber != null">shipping_number = #{shippingNumber},</if>
+            <if test="confirmFlag != null and confirmFlag != ''">confirm_flag = #{confirmFlag},</if>
+            <if test="transferDate != null">transfer_date = #{transferDate},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="attr1 != null">attr1 = #{attr1},</if>
+            <if test="attr2 != null">attr2 = #{attr2},</if>
+            <if test="attr3 != null">attr3 = #{attr3},</if>
+            <if test="attr4 != null">attr4 = #{attr4},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where transfer_id = #{transferId}
+    </update>
+
+    <delete id="deleteWmTransferByTransferId" parameterType="Long">
+        delete from wm_transfer where transfer_id = #{transferId}
+    </delete>
+
+    <delete id="deleteWmTransferByTransferIds" parameterType="String">
+        delete from wm_transfer where transfer_id in 
+        <foreach item="transferId" collection="array" open="(" separator="," close=")">
+            #{transferId}
+        </foreach>
+    </delete>
+</mapper>

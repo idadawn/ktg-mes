@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ktg.mes.wm.mapper.WmProductProduceLineMapper">
+    
+    <resultMap type="WmProductProduceLine" id="WmProductProduceLineResult">
+        <result property="lineId"    column="line_id"    />
+        <result property="recordId"    column="record_id"    />
+        <result property="feedbackId"    column="feedback_id"    />
+        <result property="itemId"    column="item_id"    />
+        <result property="itemCode"    column="item_code"    />
+        <result property="itemName"    column="item_name"    />
+        <result property="specification"    column="specification"    />
+        <result property="unitOfMeasure"    column="unit_of_measure"    />
+        <result property="unitName"    column="unit_name"    />
+        <result property="quantityProduce"    column="quantity_produce"    />
+        <result property="batchId"    column="batch_id"    />
+        <result property="batchCode"    column="batch_code"    />
+        <result property="expireDate"    column="expire_date"    />
+        <result property="lotNumber"    column="lot_number"    />
+        <result property="qualityStatus"    column="quality_status"    />
+        <result property="remark"    column="remark"    />
+        <result property="attr1"    column="attr1"    />
+        <result property="attr2"    column="attr2"    />
+        <result property="attr3"    column="attr3"    />
+        <result property="attr4"    column="attr4"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectWmProductProduceLineVo">
+        select line_id, f.record_id, p.feedback_id, item_id, item_code, item_name, specification, unit_of_measure, unit_name, quantity_produce, batch_id, batch_code, expire_date, lot_number, quality_status, f.remark, f.attr1, f.attr2, f.attr3, f.attr4, f.create_by, f.create_time, f.update_by, f.update_time
+        from wm_product_produce_line f
+            left join wm_product_produce p on f.record_id = p.record_id
+
+    </sql>
+
+    <select id="selectWmProductProduceLineList" parameterType="WmProductProduceLine" resultMap="WmProductProduceLineResult">
+        <include refid="selectWmProductProduceLineVo"/>
+        <where>  
+            <if test="recordId != null "> and f.record_id = #{recordId}</if>
+            <if test="feedbackId != null "> and p.feedback_id = #{feedbackId}</if>
+            <if test="itemId != null "> and item_id = #{itemId}</if>
+            <if test="itemCode != null  and itemCode != ''"> and item_code = #{itemCode}</if>
+            <if test="itemName != null  and itemName != ''"> and item_name like concat('%', #{itemName}, '%')</if>
+            <if test="specification != null  and specification != ''"> and specification = #{specification}</if>
+            <if test="unitOfMeasure != null  and unitOfMeasure != ''"> and unit_of_measure = #{unitOfMeasure}</if>
+            <if test="unitName != null  and unitName != ''" > and unit_name like concat('%', #{unitName}, '%')</if>
+            <if test="lotNumber != null  and lotNumber != ''"> and lot_number = #{lotNumber}</if>
+            <if test="quantityProduce != null "> and quantity_produce = #{quantityProduce}</if>
+            <if test="batchId != null "> and batch_id = #{batchId}</if>
+            <if test="batchCode != null  and batchCode != ''"> and batch_code = #{batchCode}</if>
+            <if test="qualityStatus != null  and qualityStatus != ''"> and quality_status = #{qualityStatus}</if>
+        </where>
+    </select>
+    
+    <select id="selectWmProductProduceLineByLineId" parameterType="Long" resultMap="WmProductProduceLineResult">
+        <include refid="selectWmProductProduceLineVo"/>
+        where line_id = #{lineId}
+    </select>
+
+    <insert id="insertWmProductProduceLine" parameterType="WmProductProduceLine" useGeneratedKeys="true" keyProperty="lineId">
+        insert into wm_product_produce_line
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="recordId != null">record_id,</if>
+            <if test="itemId != null">item_id,</if>
+            <if test="itemCode != null">item_code,</if>
+            <if test="itemName != null">item_name,</if>
+            <if test="specification != null">specification,</if>
+            <if test="unitOfMeasure != null">unit_of_measure,</if>
+            <if test="unitName != null">unit_name,</if>
+            <if test="quantityProduce != null">quantity_produce,</if>
+            <if test="batchId != null">batch_id,</if>
+            <if test="batchCode != null">batch_code,</if>
+            <if test="expireDate != null">expire_date,</if>
+            <if test="lotNumber != null">lot_number,</if>
+            <if test="qualityStatus != null">quality_status,</if>
+            <if test="remark != null">remark,</if>
+            <if test="attr1 != null">attr1,</if>
+            <if test="attr2 != null">attr2,</if>
+            <if test="attr3 != null">attr3,</if>
+            <if test="attr4 != null">attr4,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="recordId != null">#{recordId},</if>
+            <if test="itemId != null">#{itemId},</if>
+            <if test="itemCode != null">#{itemCode},</if>
+            <if test="itemName != null">#{itemName},</if>
+            <if test="specification != null">#{specification},</if>
+            <if test="unitOfMeasure != null">#{unitOfMeasure},</if>
+            <if test="unitName != null">#{unitName},</if>
+            <if test="quantityProduce != null">#{quantityProduce},</if>
+            <if test="batchId != null">#{batchId},</if>
+            <if test="batchCode != null">#{batchCode},</if>
+            <if test="expireDate != null">#{expireDate},</if>
+            <if test="lotNumber != null">#{lotNumber},</if>
+            <if test="qualityStatus != null">#{qualityStatus},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="attr1 != null">#{attr1},</if>
+            <if test="attr2 != null">#{attr2},</if>
+            <if test="attr3 != null">#{attr3},</if>
+            <if test="attr4 != null">#{attr4},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateWmProductProduceLine" parameterType="WmProductProduceLine">
+        update wm_product_produce_line
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="recordId != null">record_id = #{recordId},</if>
+            <if test="itemId != null">item_id = #{itemId},</if>
+            <if test="itemCode != null">item_code = #{itemCode},</if>
+            <if test="itemName != null">item_name = #{itemName},</if>
+            <if test="specification != null">specification = #{specification},</if>
+            <if test="unitOfMeasure != null">unit_of_measure = #{unitOfMeasure},</if>
+            <if test="unitName != null">unit_name = #{unitName},</if>
+            <if test="quantityProduce != null">quantity_produce = #{quantityProduce},</if>
+            <if test="batchId != null">batch_id = #{batchId},</if>
+            <if test="batchCode != null">batch_code = #{batchCode},</if>
+            <if test="expireDate != null">expire_date = #{expireDate},</if>
+            <if test="lotNumber != null">lot_number = #{lotNumber},</if>
+            <if test="qualityStatus != null">quality_status = #{qualityStatus},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="attr1 != null">attr1 = #{attr1},</if>
+            <if test="attr2 != null">attr2 = #{attr2},</if>
+            <if test="attr3 != null">attr3 = #{attr3},</if>
+            <if test="attr4 != null">attr4 = #{attr4},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where line_id = #{lineId}
+    </update>
+
+    <delete id="deleteWmProductProduceLineByLineId" parameterType="Long">
+        delete from wm_product_produce_line where line_id = #{lineId}
+    </delete>
+
+    <delete id="deleteWmProductProduceLineByLineIds" parameterType="String">
+        delete from wm_product_produce_line where line_id in 
+        <foreach item="lineId" collection="array" open="(" separator="," close=")">
+            #{lineId}
+        </foreach>
+    </delete>
+
+    <delete id="deleteByRecordId" parameterType="Long">
+        delete from wm_product_produce_line where record_id = #{record_id}
+    </delete>
+</mapper>

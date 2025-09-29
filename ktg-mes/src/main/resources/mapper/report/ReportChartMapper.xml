@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ktg.mes.report.mapper.ReportChartMapper">
+    
+    <resultMap type="ReportChart" id="ReportChartResult">
+        <result property="chartId"    column="chart_id"    />
+        <result property="chartCode"    column="chart_code"    />
+        <result property="chartName"    column="chart_name"    />
+        <result property="chartType"    column="chart_type"    />
+        <result property="businessType"    column="business_type"    />
+        <result property="api"    column="api"    />
+        <result property="options"    column="options"    />
+        <result property="chartPic"    column="chart_pic"    />
+        <result property="enableFlag"    column="enable_flag"    />
+        <result property="remark"    column="remark"    />
+        <result property="attr1"    column="attr1"    />
+        <result property="attr2"    column="attr2"    />
+        <result property="attr3"    column="attr3"    />
+        <result property="attr4"    column="attr4"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <collection property="roles" javaType="java.util.List" resultMap="RoleResult" ></collection>
+    </resultMap>
+
+    <resultMap id="RoleResult" type="SysRole">
+        <id     property="roleId"       column="role_id"        />
+        <result property="roleName"     column="role_name"      />
+        <result property="roleKey"      column="role_key"       />
+        <result property="roleSort"     column="role_sort"      />
+        <result property="dataScope"     column="data_scope"    />
+        <result property="status"       column="role_status"    />
+    </resultMap>
+
+    <sql id="selectReportChartVo">
+        select c.chart_id, c.chart_code, c.chart_name, c.chart_type, c.business_type, c.api, c.options, c.chart_pic, c.enable_flag, c.remark,  c.create_by, c.create_time, c.update_by, c.update_time,
+               r.role_id, r.role_name, r.role_key, r.role_sort, r.data_scope, r.status as role_status
+        from report_chart c
+                 left join report_chart_role cr on c.chart_id = cr.chart_id
+                 left join sys_role r on cr.role_id = r.role_id
+    </sql>
+
+    <select id="selectReportChartList" parameterType="ReportChart" resultMap="ReportChartResult">
+        <include refid="selectReportChartVo"/>
+        <where>  
+            <if test="chartCode != null  and chartCode != ''"> and c.chart_code = #{chartCode}</if>
+            <if test="chartName != null  and chartName != ''"> and c.chart_name like concat('%', #{chartName}, '%')</if>
+            <if test="chartType != null  and chartType != ''"> and c.chart_type = #{chartType}</if>
+            <if test="businessType != null  and businessType != ''"> and c.business_type = #{businessType}</if>
+            <if test="api != null  and api != ''"> and c.api = #{api}</if>
+            <if test="options != null  and options != ''"> and options = #{options}</if>
+            <if test="chartPic != null  and chartPic != ''"> and chart_pic = #{chartPic}</if>
+            <if test="enableFlag != null  and enableFlag != ''"> and c.enable_flag = #{enableFlag}</if>
+        </where>
+    </select>
+    
+    <select id="selectReportChartByChartId" parameterType="Long" resultMap="ReportChartResult">
+        <include refid="selectReportChartVo"/>
+        where c.chart_id = #{chartId}
+    </select>
+
+    <select id="getMyCharts" parameterType="String" resultMap="ReportChartResult">
+        select distinct c.chart_id, c.chart_code, c.chart_name, c.chart_type, c.business_type, c.api, c.options, c.chart_pic, c.enable_flag, c.remark,  c.create_by, c.create_time, c.update_by, c.update_time
+        from report_chart c
+                 left join report_chart_role cr on c.chart_id = cr.chart_id
+                 left join sys_role r on cr.role_id = r.role_id
+        where r.role_id in
+        <foreach item="roleId" collection="array" open="(" separator="," close=")">
+            #{roleId}
+        </foreach>
+          and c.enable_flag = 'Y'
+        order by c.create_time asc
+    </select>
+        
+    <insert id="insertReportChart" parameterType="ReportChart" useGeneratedKeys="true" keyProperty="chartId">
+        insert into report_chart
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="chartCode != null and chartCode != ''">chart_code,</if>
+            <if test="chartName != null and chartName != ''">chart_name,</if>
+            <if test="chartType != null and chartType != ''">chart_type,</if>
+            <if test="businessType != null and businessType != ''">business_type,</if>
+            <if test="api != null">api,</if>
+            <if test="options != null and options != ''">options,</if>
+            <if test="chartPic != null">chart_pic,</if>
+            <if test="enableFlag != null">enable_flag,</if>
+            <if test="remark != null">remark,</if>
+            <if test="attr1 != null">attr1,</if>
+            <if test="attr2 != null">attr2,</if>
+            <if test="attr3 != null">attr3,</if>
+            <if test="attr4 != null">attr4,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="chartCode != null and chartCode != ''">#{chartCode},</if>
+            <if test="chartName != null and chartName != ''">#{chartName},</if>
+            <if test="chartType != null and chartType != ''">#{chartType},</if>
+            <if test="businessType != null and businessType != ''">#{businessType},</if>
+            <if test="api != null">#{api},</if>
+            <if test="options != null and options != ''">#{options},</if>
+            <if test="chartPic != null">#{chartPic},</if>
+            <if test="enableFlag != null">#{enableFlag},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="attr1 != null">#{attr1},</if>
+            <if test="attr2 != null">#{attr2},</if>
+            <if test="attr3 != null">#{attr3},</if>
+            <if test="attr4 != null">#{attr4},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateReportChart" parameterType="ReportChart">
+        update report_chart
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="chartCode != null and chartCode != ''">chart_code = #{chartCode},</if>
+            <if test="chartName != null and chartName != ''">chart_name = #{chartName},</if>
+            <if test="chartType != null and chartType != ''">chart_type = #{chartType},</if>
+            <if test="businessType != null and businessType != ''">business_type = #{businessType},</if>
+            <if test="api != null">api = #{api},</if>
+            <if test="options != null and options != ''">options = #{options},</if>
+            <if test="chartPic != null">chart_pic = #{chartPic},</if>
+            <if test="enableFlag != null">enable_flag = #{enableFlag},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="attr1 != null">attr1 = #{attr1},</if>
+            <if test="attr2 != null">attr2 = #{attr2},</if>
+            <if test="attr3 != null">attr3 = #{attr3},</if>
+            <if test="attr4 != null">attr4 = #{attr4},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where chart_id = #{chartId}
+    </update>
+
+    <delete id="deleteReportChartByChartId" parameterType="Long">
+        delete from report_chart where chart_id = #{chartId}
+    </delete>
+
+    <delete id="deleteReportChartByChartIds" parameterType="String">
+        delete from report_chart where chart_id in 
+        <foreach item="chartId" collection="array" open="(" separator="," close=")">
+            #{chartId}
+        </foreach>
+    </delete>
+</mapper>

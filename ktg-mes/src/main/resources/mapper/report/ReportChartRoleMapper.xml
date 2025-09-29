@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ktg.mes.report.mapper.ReportChartRoleMapper">
+    
+    <resultMap type="ReportChartRole" id="ReportChartRoleResult">
+        <result property="chartId"    column="chart_id"    />
+        <result property="roleId"    column="role_id"    />
+    </resultMap>
+
+    <sql id="selectReportChartRoleVo">
+        select chart_id, role_id from report_chart_role
+    </sql>
+
+    <select id="selectReportChartRoleList" parameterType="ReportChartRole" resultMap="ReportChartRoleResult">
+        <include refid="selectReportChartRoleVo"/>
+        <where>  
+        </where>
+    </select>
+    
+    <select id="selectReportChartRoleByChartId" parameterType="Long" resultMap="ReportChartRoleResult">
+        <include refid="selectReportChartRoleVo"/>
+        where chart_id = #{chartId}
+    </select>
+        
+    <insert id="insertReportChartRole" parameterType="ReportChartRole">
+        insert into report_chart_role
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="chartId != null">chart_id,</if>
+            <if test="roleId != null">role_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="chartId != null">#{chartId},</if>
+            <if test="roleId != null">#{roleId},</if>
+         </trim>
+    </insert>
+
+    <insert id="batchChartRole">
+        insert into report_chart_role(chart_id, role_id) values
+        <foreach item="item" index="index" collection="list" separator=",">
+            (#{item.chartId},#{item.roleId})
+        </foreach>
+    </insert>
+
+    <update id="updateReportChartRole" parameterType="ReportChartRole">
+        update report_chart_role
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="roleId != null">role_id = #{roleId},</if>
+        </trim>
+        where chart_id = #{chartId}
+    </update>
+
+    <delete id="deleteReportChartRoleByChartId" parameterType="Long">
+        delete from report_chart_role where chart_id = #{chartId}
+    </delete>
+
+    <delete id="deleteReportChartRoleByChartIds" parameterType="String">
+        delete from report_chart_role where chart_id in 
+        <foreach item="chartId" collection="array" open="(" separator="," close=")">
+            #{chartId}
+        </foreach>
+    </delete>
+</mapper>

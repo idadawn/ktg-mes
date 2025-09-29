@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ktg.mes.wm.mapper.WmSalesNoticeMapper">
+    
+    <resultMap type="WmSalesNotice" id="WmSalesNoticeResult">
+        <result property="noticeId"    column="notice_id"    />
+        <result property="noticeCode"    column="notice_code"    />
+        <result property="noticeName"    column="notice_name"    />
+        <result property="soCode"    column="so_code"    />
+        <result property="clientId"    column="client_id"    />
+        <result property="clientCode"    column="client_code"    />
+        <result property="clientName"    column="client_name"    />
+        <result property="clientNick"    column="client_nick"    />
+        <result property="salesDate"    column="sales_date"    />
+        <result property="recipient"    column="recipient"    />
+        <result property="tel"    column="tel"    />
+        <result property="address"    column="address"    />
+        <result property="status"    column="status"    />
+        <result property="remark"    column="remark"    />
+        <result property="attr1"    column="attr1"    />
+        <result property="attr2"    column="attr2"    />
+        <result property="attr3"    column="attr3"    />
+        <result property="attr4"    column="attr4"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectWmSalesNoticeVo">
+        select notice_id, notice_code, notice_name, so_code, client_id, client_code, client_name, client_nick, sales_date, recipient, tel, address, status, remark, attr1, attr2, attr3, attr4, create_by, create_time, update_by, update_time from wm_sales_notice
+    </sql>
+
+    <select id="selectWmSalesNoticeList" parameterType="WmSalesNotice" resultMap="WmSalesNoticeResult">
+        <include refid="selectWmSalesNoticeVo"/>
+        <where>  
+            <if test="noticeCode != null  and noticeCode != ''"> and notice_code = #{noticeCode}</if>
+            <if test="noticeName != null  and noticeName != ''"> and notice_name like concat('%', #{noticeName}, '%')</if>
+            <if test="soCode != null  and soCode != ''"> and so_code = #{soCode}</if>
+            <if test="clientId != null "> and client_id = #{clientId}</if>
+            <if test="clientCode != null  and clientCode != ''"> and client_code = #{clientCode}</if>
+            <if test="clientName != null  and clientName != ''"> and client_name like concat('%', #{clientName}, '%')</if>
+            <if test="clientNick != null  and clientNick != ''"> and client_nick = #{clientNick}</if>
+            <if test="salesDate != null "> and sales_date = #{salesDate}</if>
+            <if test="recipient != null  and recipient != ''"> and recipient = #{recipient}</if>
+            <if test="tel != null  and tel != ''"> and tel = #{tel}</if>
+            <if test="address != null  and address != ''"> and address = #{address}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+        order by create_time desc
+    </select>
+    
+    <select id="selectWmSalesNoticeByNoticeId" parameterType="Long" resultMap="WmSalesNoticeResult">
+        <include refid="selectWmSalesNoticeVo"/>
+        where notice_id = #{noticeId}
+    </select>
+
+    <select id="checkCodeUnique" parameterType="WmSalesNotice" resultMap="WmSalesNoticeResult">
+        <include refid="selectWmSalesNoticeVo"/>
+        where notice_code = #{noticeCode}
+    </select>
+
+    <insert id="insertWmSalesNotice" parameterType="WmSalesNotice" useGeneratedKeys="true" keyProperty="noticeId">
+        insert into wm_sales_notice
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="noticeCode != null and noticeCode != ''">notice_code,</if>
+            <if test="noticeName != null and noticeName != ''">notice_name,</if>
+            <if test="soCode != null">so_code,</if>
+            <if test="clientId != null">client_id,</if>
+            <if test="clientCode != null">client_code,</if>
+            <if test="clientName != null">client_name,</if>
+            <if test="clientNick != null">client_nick,</if>
+            <if test="salesDate != null">sales_date,</if>
+            <if test="recipient != null">recipient,</if>
+            <if test="tel != null">tel,</if>
+            <if test="address != null">address,</if>
+            <if test="status != null">status,</if>
+            <if test="remark != null">remark,</if>
+            <if test="attr1 != null">attr1,</if>
+            <if test="attr2 != null">attr2,</if>
+            <if test="attr3 != null">attr3,</if>
+            <if test="attr4 != null">attr4,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="noticeCode != null and noticeCode != ''">#{noticeCode},</if>
+            <if test="noticeName != null and noticeName != ''">#{noticeName},</if>
+            <if test="soCode != null">#{soCode},</if>
+            <if test="clientId != null">#{clientId},</if>
+            <if test="clientCode != null">#{clientCode},</if>
+            <if test="clientName != null">#{clientName},</if>
+            <if test="clientNick != null">#{clientNick},</if>
+            <if test="salesDate != null">#{salesDate},</if>
+            <if test="recipient != null">#{recipient},</if>
+            <if test="tel != null">#{tel},</if>
+            <if test="address != null">#{address},</if>
+            <if test="status != null">#{status},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="attr1 != null">#{attr1},</if>
+            <if test="attr2 != null">#{attr2},</if>
+            <if test="attr3 != null">#{attr3},</if>
+            <if test="attr4 != null">#{attr4},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateWmSalesNotice" parameterType="WmSalesNotice">
+        update wm_sales_notice
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="noticeCode != null and noticeCode != ''">notice_code = #{noticeCode},</if>
+            <if test="noticeName != null and noticeName != ''">notice_name = #{noticeName},</if>
+            <if test="soCode != null">so_code = #{soCode},</if>
+            <if test="clientId != null">client_id = #{clientId},</if>
+            <if test="clientCode != null">client_code = #{clientCode},</if>
+            <if test="clientName != null">client_name = #{clientName},</if>
+            <if test="clientNick != null">client_nick = #{clientNick},</if>
+            <if test="salesDate != null">sales_date = #{salesDate},</if>
+            <if test="recipient != null">recipient = #{recipient},</if>
+            <if test="tel != null">tel = #{tel},</if>
+            <if test="address != null">address = #{address},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="attr1 != null">attr1 = #{attr1},</if>
+            <if test="attr2 != null">attr2 = #{attr2},</if>
+            <if test="attr3 != null">attr3 = #{attr3},</if>
+            <if test="attr4 != null">attr4 = #{attr4},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where notice_id = #{noticeId}
+    </update>
+
+    <delete id="deleteWmSalesNoticeByNoticeId" parameterType="Long">
+        delete from wm_sales_notice where notice_id = #{noticeId}
+    </delete>
+
+    <delete id="deleteWmSalesNoticeByNoticeIds" parameterType="String">
+        delete from wm_sales_notice where notice_id in 
+        <foreach item="noticeId" collection="array" open="(" separator="," close=")">
+            #{noticeId}
+        </foreach>
+    </delete>
+</mapper>

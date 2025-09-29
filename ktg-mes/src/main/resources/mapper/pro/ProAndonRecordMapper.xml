@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ktg.mes.pro.mapper.ProAndonRecordMapper">
+    
+    <resultMap type="ProAndonRecord" id="ProAndonRecordResult">
+        <result property="recordId"    column="record_id"    />
+        <result property="workstationId"    column="workstation_id"    />
+        <result property="workstationCode"    column="workstation_code"    />
+        <result property="workstationName"    column="workstation_name"    />
+        <result property="userId"    column="user_id"    />
+        <result property="userName"    column="user_name"    />
+        <result property="nickName"    column="nick_name"    />
+        <result property="workorderId"    column="workorder_id"    />
+        <result property="workorderCode"    column="workorder_code"    />
+        <result property="workorderName"    column="workorder_name"    />
+        <result property="processId"    column="process_id"    />
+        <result property="processCode"    column="process_code"    />
+        <result property="processName"    column="process_name"    />
+        <result property="andonReason"    column="andon_reason"    />
+        <result property="andonLevel"    column="andon_level"    />
+        <result property="handleTime"    column="handle_time"    />
+        <result property="handlerUserId"    column="handler_user_id"    />
+        <result property="handlerUserName"    column="handler_user_name"    />
+        <result property="handlerNickName"    column="handler_nick_name"    />
+        <result property="status"    column="status"    />
+        <result property="remark"    column="remark"    />
+        <result property="attr1"    column="attr1"    />
+        <result property="attr2"    column="attr2"    />
+        <result property="attr3"    column="attr3"    />
+        <result property="attr4"    column="attr4"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectProAndonRecordVo">
+        select record_id, workstation_id, workstation_code, workstation_name, user_id, user_name, nick_name, workorder_id, workorder_code, workorder_name, process_id, process_code, process_name, andon_reason, andon_level, handle_time, handler_user_id, handler_user_name, handler_nick_name, status, remark, attr1, attr2, attr3, attr4, create_by, create_time, update_by, update_time from pro_andon_record
+    </sql>
+
+    <select id="selectProAndonRecordList" parameterType="ProAndonRecord" resultMap="ProAndonRecordResult">
+        <include refid="selectProAndonRecordVo"/>
+        <where>  
+            <if test="workstationId != null "> and workstation_id = #{workstationId}</if>
+            <if test="workstationCode != null  and workstationCode != ''"> and workstation_code = #{workstationCode}</if>
+            <if test="workstationName != null  and workstationName != ''"> and workstation_name like concat('%', #{workstationName}, '%')</if>
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="userName != null  and userName != ''"> and user_name like concat('%', #{userName}, '%')</if>
+            <if test="nickName != null  and nickName != ''"> and nick_name like concat('%', #{nickName}, '%')</if>
+            <if test="workorderId != null "> and workorder_id = #{workorderId}</if>
+            <if test="workorderCode != null  and workorderCode != ''"> and workorder_code = #{workorderCode}</if>
+            <if test="workorderName != null  and workorderName != ''"> and workorder_name like concat('%', #{workorderName}, '%')</if>
+            <if test="processId != null "> and process_id = #{processId}</if>
+            <if test="processCode != null  and processCode != ''"> and process_code = #{processCode}</if>
+            <if test="processName != null  and processName != ''"> and process_name like concat('%', #{processName}, '%')</if>
+            <if test="andonReason != null  and andonReason != ''"> and andon_reason = #{andonReason}</if>
+            <if test="andonLevel != null  and andonLevel != ''"> and andon_level = #{andonLevel}</if>
+            <if test="handleTime != null "> and handle_time = #{handleTime}</if>
+            <if test="handlerUserId != null "> and handler_user_id = #{handlerUserId}</if>
+            <if test="handlerUserName != null  and handlerUserName != ''"> and handler_user_name like concat('%', #{handlerUserName}, '%')</if>
+            <if test="handlerNickName != null  and handlerNickName != ''"> and handler_nick_name like concat('%', #{handlerNickName}, '%')</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="attr1 != null  and attr1 != ''"> and attr1 = #{attr1}</if>
+            <if test="attr2 != null  and attr2 != ''"> and attr2 = #{attr2}</if>
+            <if test="attr3 != null "> and attr3 = #{attr3}</if>
+            <if test="attr4 != null "> and attr4 = #{attr4}</if>
+        </where>
+        order by create_time desc
+    </select>
+    
+    <select id="selectProAndonRecordByRecordId" parameterType="Long" resultMap="ProAndonRecordResult">
+        <include refid="selectProAndonRecordVo"/>
+        where record_id = #{recordId}
+    </select>
+        
+    <insert id="insertProAndonRecord" parameterType="ProAndonRecord" useGeneratedKeys="true" keyProperty="recordId">
+        insert into pro_andon_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="workstationId != null">workstation_id,</if>
+            <if test="workstationCode != null">workstation_code,</if>
+            <if test="workstationName != null">workstation_name,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="userName != null">user_name,</if>
+            <if test="nickName != null">nick_name,</if>
+            <if test="workorderId != null">workorder_id,</if>
+            <if test="workorderCode != null">workorder_code,</if>
+            <if test="workorderName != null">workorder_name,</if>
+            <if test="processId != null">process_id,</if>
+            <if test="processCode != null">process_code,</if>
+            <if test="processName != null">process_name,</if>
+            <if test="andonReason != null and andonReason != ''">andon_reason,</if>
+            <if test="andonLevel != null">andon_level,</if>
+            <if test="handleTime != null">handle_time,</if>
+            <if test="handlerUserId != null">handler_user_id,</if>
+            <if test="handlerUserName != null">handler_user_name,</if>
+            <if test="handlerNickName != null">handler_nick_name,</if>
+            <if test="status != null">status,</if>
+            <if test="remark != null">remark,</if>
+            <if test="attr1 != null">attr1,</if>
+            <if test="attr2 != null">attr2,</if>
+            <if test="attr3 != null">attr3,</if>
+            <if test="attr4 != null">attr4,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="workstationId != null">#{workstationId},</if>
+            <if test="workstationCode != null">#{workstationCode},</if>
+            <if test="workstationName != null">#{workstationName},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="userName != null">#{userName},</if>
+            <if test="nickName != null">#{nickName},</if>
+            <if test="workorderId != null">#{workorderId},</if>
+            <if test="workorderCode != null">#{workorderCode},</if>
+            <if test="workorderName != null">#{workorderName},</if>
+            <if test="processId != null">#{processId},</if>
+            <if test="processCode != null">#{processCode},</if>
+            <if test="processName != null">#{processName},</if>
+            <if test="andonReason != null and andonReason != ''">#{andonReason},</if>
+            <if test="andonLevel != null">#{andonLevel},</if>
+            <if test="handleTime != null">#{handleTime},</if>
+            <if test="handlerUserId != null">#{handlerUserId},</if>
+            <if test="handlerUserName != null">#{handlerUserName},</if>
+            <if test="handlerNickName != null">#{handlerNickName},</if>
+            <if test="status != null">#{status},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="attr1 != null">#{attr1},</if>
+            <if test="attr2 != null">#{attr2},</if>
+            <if test="attr3 != null">#{attr3},</if>
+            <if test="attr4 != null">#{attr4},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateProAndonRecord" parameterType="ProAndonRecord">
+        update pro_andon_record
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="workstationId != null">workstation_id = #{workstationId},</if>
+            <if test="workstationCode != null">workstation_code = #{workstationCode},</if>
+            <if test="workstationName != null">workstation_name = #{workstationName},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="userName != null">user_name = #{userName},</if>
+            <if test="nickName != null">nick_name = #{nickName},</if>
+            <if test="workorderId != null">workorder_id = #{workorderId},</if>
+            <if test="workorderCode != null">workorder_code = #{workorderCode},</if>
+            <if test="workorderName != null">workorder_name = #{workorderName},</if>
+            <if test="processId != null">process_id = #{processId},</if>
+            <if test="processCode != null">process_code = #{processCode},</if>
+            <if test="processName != null">process_name = #{processName},</if>
+            <if test="andonReason != null and andonReason != ''">andon_reason = #{andonReason},</if>
+            <if test="andonLevel != null">andon_level = #{andonLevel},</if>
+            <if test="handleTime != null">handle_time = #{handleTime},</if>
+            <if test="handlerUserId != null">handler_user_id = #{handlerUserId},</if>
+            <if test="handlerUserName != null">handler_user_name = #{handlerUserName},</if>
+            <if test="handlerNickName != null">handler_nick_name = #{handlerNickName},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="attr1 != null">attr1 = #{attr1},</if>
+            <if test="attr2 != null">attr2 = #{attr2},</if>
+            <if test="attr3 != null">attr3 = #{attr3},</if>
+            <if test="attr4 != null">attr4 = #{attr4},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where record_id = #{recordId}
+    </update>
+
+    <delete id="deleteProAndonRecordByRecordId" parameterType="Long">
+        delete from pro_andon_record where record_id = #{recordId}
+    </delete>
+
+    <delete id="deleteProAndonRecordByRecordIds" parameterType="String">
+        delete from pro_andon_record where record_id in 
+        <foreach item="recordId" collection="array" open="(" separator="," close=")">
+            #{recordId}
+        </foreach>
+    </delete>
+</mapper>

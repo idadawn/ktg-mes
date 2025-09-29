@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ktg.mes.pro.mapper.ProAndonConfigMapper">
+    
+    <resultMap type="ProAndonConfig" id="ProAndonConfigResult">
+        <result property="configId"    column="config_id"    />
+        <result property="andonReason"    column="andon_reason"    />
+        <result property="andonLevel"    column="andon_level"    />
+        <result property="handlerRoleId"    column="handler_role_id"    />
+        <result property="handlerRoleName"    column="handler_role_name"    />
+        <result property="handlerUserId"    column="handler_user_id"    />
+        <result property="handlerUserName"    column="handler_user_name"    />
+        <result property="handlerNickName"    column="handler_nick_name"    />
+        <result property="remark"    column="remark"    />
+        <result property="attr1"    column="attr1"    />
+        <result property="attr2"    column="attr2"    />
+        <result property="attr3"    column="attr3"    />
+        <result property="attr4"    column="attr4"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectProAndonConfigVo">
+        select config_id, andon_reason, andon_level, handler_role_id, handler_role_name, handler_user_id, handler_user_name, handler_nick_name, remark, attr1, attr2, attr3, attr4, create_by, create_time, update_by, update_time from pro_andon_config
+    </sql>
+
+    <select id="selectProAndonConfigList" parameterType="ProAndonConfig" resultMap="ProAndonConfigResult">
+        <include refid="selectProAndonConfigVo"/>
+        <where>  
+            <if test="andonReason != null  and andonReason != ''"> and andon_reason = #{andonReason}</if>
+            <if test="andonLevel != null  and andonLevel != ''"> and andon_level = #{andonLevel}</if>
+            <if test="handlerRoleId != null "> and handler_role_id = #{handlerRoleId}</if>
+            <if test="handlerRoleName != null  and handlerRoleName != ''"> and handler_role_name like concat('%', #{handlerRoleName}, '%')</if>
+            <if test="handlerUserId != null "> and handler_user_id = #{handlerUserId}</if>
+            <if test="handlerUserName != null  and handlerUserName != ''"> and handler_user_name like concat('%', #{handlerUserName}, '%')</if>
+            <if test="handlerNickName != null  and handlerNickName != ''"> and handler_nick_name like concat('%', #{handlerNickName}, '%')</if>
+        </where>
+        order by create_time desc
+    </select>
+    
+    <select id="selectProAndonConfigByConfigId" parameterType="Long" resultMap="ProAndonConfigResult">
+        <include refid="selectProAndonConfigVo"/>
+        where config_id = #{configId}
+    </select>
+        
+    <insert id="insertProAndonConfig" parameterType="ProAndonConfig" useGeneratedKeys="true" keyProperty="configId">
+        insert into pro_andon_config
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="andonReason != null and andonReason != ''">andon_reason,</if>
+            <if test="andonLevel != null and andonLevel != ''">andon_level,</if>
+            <if test="handlerRoleId != null">handler_role_id,</if>
+            <if test="handlerRoleName != null">handler_role_name,</if>
+            <if test="handlerUserId != null">handler_user_id,</if>
+            <if test="handlerUserName != null">handler_user_name,</if>
+            <if test="handlerNickName != null">handler_nick_name,</if>
+            <if test="remark != null">remark,</if>
+            <if test="attr1 != null">attr1,</if>
+            <if test="attr2 != null">attr2,</if>
+            <if test="attr3 != null">attr3,</if>
+            <if test="attr4 != null">attr4,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="andonReason != null and andonReason != ''">#{andonReason},</if>
+            <if test="andonLevel != null and andonLevel != ''">#{andonLevel},</if>
+            <if test="handlerRoleId != null">#{handlerRoleId},</if>
+            <if test="handlerRoleName != null">#{handlerRoleName},</if>
+            <if test="handlerUserId != null">#{handlerUserId},</if>
+            <if test="handlerUserName != null">#{handlerUserName},</if>
+            <if test="handlerNickName != null">#{handlerNickName},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="attr1 != null">#{attr1},</if>
+            <if test="attr2 != null">#{attr2},</if>
+            <if test="attr3 != null">#{attr3},</if>
+            <if test="attr4 != null">#{attr4},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateProAndonConfig" parameterType="ProAndonConfig">
+        update pro_andon_config
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="andonReason != null and andonReason != ''">andon_reason = #{andonReason},</if>
+            <if test="andonLevel != null and andonLevel != ''">andon_level = #{andonLevel},</if>
+            <if test="handlerRoleId != null">handler_role_id = #{handlerRoleId},</if>
+            <if test="handlerRoleName != null">handler_role_name = #{handlerRoleName},</if>
+            <if test="handlerUserId != null">handler_user_id = #{handlerUserId},</if>
+            <if test="handlerUserName != null">handler_user_name = #{handlerUserName},</if>
+            <if test="handlerNickName != null">handler_nick_name = #{handlerNickName},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="attr1 != null">attr1 = #{attr1},</if>
+            <if test="attr2 != null">attr2 = #{attr2},</if>
+            <if test="attr3 != null">attr3 = #{attr3},</if>
+            <if test="attr4 != null">attr4 = #{attr4},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where config_id = #{configId}
+    </update>
+
+    <delete id="deleteProAndonConfigByConfigId" parameterType="Long">
+        delete from pro_andon_config where config_id = #{configId}
+    </delete>
+
+    <delete id="deleteProAndonConfigByConfigIds" parameterType="String">
+        delete from pro_andon_config where config_id in 
+        <foreach item="configId" collection="array" open="(" separator="," close=")">
+            #{configId}
+        </foreach>
+    </delete>
+</mapper>

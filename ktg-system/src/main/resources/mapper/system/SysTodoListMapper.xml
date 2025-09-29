@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ktg.system.mapper.SysTodoListMapper">
+    
+    <resultMap type="SysTodoList" id="SysTodoListResult">
+        <result property="taskId"    column="task_id"    />
+        <result property="taskName"    column="task_name"    />
+        <result property="taskType"    column="task_type"    />
+        <result property="sysCode"    column="sys_code"    />
+        <result property="url"    column="url"    />
+        <result property="appUrl"    column="app_url"    />
+        <result property="h5Url"    column="h5_url"    />
+        <result property="priority"    column="priority"    />
+        <result property="businessId"    column="business_id"    />
+        <result property="businessCode"    column="business_code"    />
+        <result property="businessCategory"    column="business_category"    />
+        <result property="businessType"    column="business_type"    />
+        <result property="businessName"    column="business_name"    />
+        <result property="ownerId"    column="owner_id"    />
+        <result property="ownerName"    column="owner_name"    />
+        <result property="ownerNick"    column="owner_nick"    />
+        <result property="creatorId"    column="creator_id"    />
+        <result property="creatorName"    column="creator_name"    />
+        <result property="creatorNick"    column="creator_nick"    />
+        <result property="processStatus"    column="process_status"    />
+        <result property="nodeName"    column="node_name"    />
+        <result property="status"    column="status"    />
+        <result property="remark"    column="remark"    />
+        <result property="attr1"    column="attr1"    />
+        <result property="attr2"    column="attr2"    />
+        <result property="attr3"    column="attr3"    />
+        <result property="attr4"    column="attr4"    />
+        <result property="expireTime"    column="expire_time"    />
+        <result property="completeTime"    column="complete_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectSysTodoListVo">
+        select task_id, task_name, task_type, sys_code, url, app_url, h5_url, priority, business_id, business_code, business_category, business_type, business_name, owner_id, owner_name, owner_nick, creator_id, creator_name, creator_nick, process_status, node_name, status, remark, attr1, attr2, attr3, attr4, expire_time, complete_time, create_by, create_time, update_by, update_time from sys_todo_list
+    </sql>
+
+    <select id="selectSysTodoListList" parameterType="SysTodoList" resultMap="SysTodoListResult">
+        <include refid="selectSysTodoListVo"/>
+        <where>  
+            <if test="taskName != null  and taskName != ''"> and task_name like concat('%', #{taskName}, '%')</if>
+            <if test="taskType != null "> and task_type = #{taskType}</if>
+            <if test="sysCode != null  and sysCode != ''"> and sys_code = #{sysCode}</if>
+            <if test="url != null  and url != ''"> and url = #{url}</if>
+            <if test="appUrl != null  and appUrl != ''"> and app_url = #{appUrl}</if>
+            <if test="h5Url != null  and h5Url != ''"> and h5_url = #{h5Url}</if>
+            <if test="priority != null  and priority != ''"> and priority = #{priority}</if>
+            <if test="businessId != null "> and business_id = #{businessId}</if>
+            <if test="businessCode != null  and businessCode != ''"> and business_code = #{businessCode}</if>
+            <if test="businessCategory != null  and businessCategory != ''"> and business_category = #{businessCategory}</if>
+            <if test="businessType != null  and businessType != ''"> and business_type = #{businessType}</if>
+            <if test="businessName != null  and businessName != ''"> and business_name like concat('%', #{businessName}, '%')</if>
+            <if test="ownerId != null "> and owner_id = #{ownerId}</if>
+            <if test="ownerName != null  and ownerName != ''"> and owner_name like concat('%', #{ownerName}, '%')</if>
+            <if test="ownerNick != null  and ownerNick != ''"> and owner_nick = #{ownerNick}</if>
+            <if test="creatorId != null "> and creator_id = #{creatorId}</if>
+            <if test="creatorName != null  and creatorName != ''"> and creator_name like concat('%', #{creatorName}, '%')</if>
+            <if test="creatorNick != null  and creatorNick != ''"> and creator_nick = #{creatorNick}</if>
+            <if test="processStatus != null  and processStatus != ''"> and process_status = #{processStatus}</if>
+            <if test="nodeName != null  and nodeName != ''"> and node_name like concat('%', #{nodeName}, '%')</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="attr1 != null  and attr1 != ''"> and attr1 = #{attr1}</if>
+            <if test="attr2 != null  and attr2 != ''"> and attr2 = #{attr2}</if>
+            <if test="attr3 != null "> and attr3 = #{attr3}</if>
+            <if test="attr4 != null "> and attr4 = #{attr4}</if>
+            <if test="expireTime != null "> and expire_time = #{expireTime}</if>
+            <if test="completeTime != null "> and complete_time = #{completeTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectSysTodoListByTaskId" parameterType="Long" resultMap="SysTodoListResult">
+        <include refid="selectSysTodoListVo"/>
+        where task_id = #{taskId}
+    </select>
+        
+    <insert id="insertSysTodoList" parameterType="SysTodoList" useGeneratedKeys="true" keyProperty="taskId">
+        insert into sys_todo_list
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="taskName != null and taskName != ''">task_name,</if>
+            <if test="taskType != null">task_type,</if>
+            <if test="sysCode != null and sysCode != ''">sys_code,</if>
+            <if test="url != null and url != ''">url,</if>
+            <if test="appUrl != null and appUrl != ''">app_url,</if>
+            <if test="h5Url != null and h5Url != ''">h5_url,</if>
+            <if test="priority != null">priority,</if>
+            <if test="businessId != null">business_id,</if>
+            <if test="businessCode != null and businessCode != ''">business_code,</if>
+            <if test="businessCategory != null and businessCategory != ''">business_category,</if>
+            <if test="businessType != null and businessType != ''">business_type,</if>
+            <if test="businessName != null">business_name,</if>
+            <if test="ownerId != null">owner_id,</if>
+            <if test="ownerName != null and ownerName != ''">owner_name,</if>
+            <if test="ownerNick != null and ownerNick != ''">owner_nick,</if>
+            <if test="creatorId != null">creator_id,</if>
+            <if test="creatorName != null">creator_name,</if>
+            <if test="creatorNick != null">creator_nick,</if>
+            <if test="processStatus != null">process_status,</if>
+            <if test="nodeName != null">node_name,</if>
+            <if test="status != null">status,</if>
+            <if test="remark != null">remark,</if>
+            <if test="attr1 != null">attr1,</if>
+            <if test="attr2 != null">attr2,</if>
+            <if test="attr3 != null">attr3,</if>
+            <if test="attr4 != null">attr4,</if>
+            <if test="expireTime != null">expire_time,</if>
+            <if test="completeTime != null">complete_time,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="taskName != null and taskName != ''">#{taskName},</if>
+            <if test="taskType != null">#{taskType},</if>
+            <if test="sysCode != null and sysCode != ''">#{sysCode},</if>
+            <if test="url != null and url != ''">#{url},</if>
+            <if test="appUrl != null and appUrl != ''">#{appUrl},</if>
+            <if test="h5Url != null and h5Url != ''">#{h5Url},</if>
+            <if test="priority != null">#{priority},</if>
+            <if test="businessId != null">#{businessId},</if>
+            <if test="businessCode != null and businessCode != ''">#{businessCode},</if>
+            <if test="businessCategory != null and businessCategory != ''">#{businessCategory},</if>
+            <if test="businessType != null and businessType != ''">#{businessType},</if>
+            <if test="businessName != null">#{businessName},</if>
+            <if test="ownerId != null">#{ownerId},</if>
+            <if test="ownerName != null and ownerName != ''">#{ownerName},</if>
+            <if test="ownerNick != null and ownerNick != ''">#{ownerNick},</if>
+            <if test="creatorId != null">#{creatorId},</if>
+            <if test="creatorName != null">#{creatorName},</if>
+            <if test="creatorNick != null">#{creatorNick},</if>
+            <if test="processStatus != null">#{processStatus},</if>
+            <if test="nodeName != null">#{nodeName},</if>
+            <if test="status != null">#{status},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="attr1 != null">#{attr1},</if>
+            <if test="attr2 != null">#{attr2},</if>
+            <if test="attr3 != null">#{attr3},</if>
+            <if test="attr4 != null">#{attr4},</if>
+            <if test="expireTime != null">#{expireTime},</if>
+            <if test="completeTime != null">#{completeTime},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysTodoList" parameterType="SysTodoList">
+        update sys_todo_list
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="taskName != null and taskName != ''">task_name = #{taskName},</if>
+            <if test="taskType != null">task_type = #{taskType},</if>
+            <if test="sysCode != null and sysCode != ''">sys_code = #{sysCode},</if>
+            <if test="url != null and url != ''">url = #{url},</if>
+            <if test="appUrl != null and appUrl != ''">app_url = #{appUrl},</if>
+            <if test="h5Url != null and h5Url != ''">h5_url = #{h5Url},</if>
+            <if test="priority != null">priority = #{priority},</if>
+            <if test="businessId != null">business_id = #{businessId},</if>
+            <if test="businessCode != null and businessCode != ''">business_code = #{businessCode},</if>
+            <if test="businessCategory != null and businessCategory != ''">business_category = #{businessCategory},</if>
+            <if test="businessType != null and businessType != ''">business_type = #{businessType},</if>
+            <if test="businessName != null">business_name = #{businessName},</if>
+            <if test="ownerId != null">owner_id = #{ownerId},</if>
+            <if test="ownerName != null and ownerName != ''">owner_name = #{ownerName},</if>
+            <if test="ownerNick != null and ownerNick != ''">owner_nick = #{ownerNick},</if>
+            <if test="creatorId != null">creator_id = #{creatorId},</if>
+            <if test="creatorName != null">creator_name = #{creatorName},</if>
+            <if test="creatorNick != null">creator_nick = #{creatorNick},</if>
+            <if test="processStatus != null">process_status = #{processStatus},</if>
+            <if test="nodeName != null">node_name = #{nodeName},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="attr1 != null">attr1 = #{attr1},</if>
+            <if test="attr2 != null">attr2 = #{attr2},</if>
+            <if test="attr3 != null">attr3 = #{attr3},</if>
+            <if test="attr4 != null">attr4 = #{attr4},</if>
+            <if test="expireTime != null">expire_time = #{expireTime},</if>
+            <if test="completeTime != null">complete_time = #{completeTime},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where task_id = #{taskId}
+    </update>
+
+    <delete id="deleteSysTodoListByTaskId" parameterType="Long">
+        delete from sys_todo_list where task_id = #{taskId}
+    </delete>
+
+    <delete id="deleteSysTodoListByTaskIds" parameterType="String">
+        delete from sys_todo_list where task_id in 
+        <foreach item="taskId" collection="array" open="(" separator="," close=")">
+            #{taskId}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,217 @@
+package com.ktg.mes.wm.controller.mobile;
+
+import com.ktg.common.annotation.Log;
+import com.ktg.common.constant.UserConstants;
+import com.ktg.common.core.controller.BaseController;
+import com.ktg.common.core.domain.AjaxResult;
+import com.ktg.common.core.page.TableDataInfo;
+import com.ktg.common.enums.BusinessType;
+import com.ktg.common.utils.StringUtils;
+import com.ktg.common.utils.poi.ExcelUtil;
+import com.ktg.mes.pro.domain.ProWorkorder;
+import com.ktg.mes.pro.service.IProWorkorderService;
+import com.ktg.mes.wm.domain.WmOutsourceRecpt;
+import com.ktg.mes.wm.domain.WmOutsourceRecptLine;
+import com.ktg.mes.wm.domain.tx.OutsourceRecptTxBean;
+import com.ktg.mes.wm.service.IStorageCoreService;
+import com.ktg.mes.wm.service.IWmOutsourceRecptDetailService;
+import com.ktg.mes.wm.service.IWmOutsourceRecptLineService;
+import com.ktg.mes.wm.service.IWmOutsourceRecptService;
+import com.ktg.system.strategy.AutoCodeUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
+import org.springframework.util.CollectionUtils;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
+import java.math.BigDecimal;
+import java.util.List;
+
+@RestController
+@RequestMapping("/mobile/wm/outsourcerecpt")
+public class WmOutsourceRecptMobController extends BaseController {
+
+    @Autowired
+    private IWmOutsourceRecptService wmOutsourceRecptService;
+
+    @Autowired
+    private IWmOutsourceRecptLineService wmOutsourceRecptLineService;
+
+    @Autowired
+    private IWmOutsourceRecptDetailService wmOutsourceRecptDetailService;
+
+    @Autowired
+    private IStorageCoreService storageCoreService;
+
+    @Autowired
+    private IProWorkorderService proWorkorderService;
+
+    @Autowired
+    private AutoCodeUtil autoCodeUtil;
+
+
+    /**
+     * 查询外协入库单列表
+     */
+    @PreAuthorize("@ss.hasPermi('mes:wm:outsourcerecpt:list')")
+    @GetMapping("/list")
+    public TableDataInfo list(WmOutsourceRecpt wmOutsourceRecpt)
+    {
+        startPage();
+        List<WmOutsourceRecpt> list = wmOutsourceRecptService.selectWmOutsourceRecptList(wmOutsourceRecpt);
+        return getDataTable(list);
+    }
+
+    /**
+     * 获取外协入库单详细信息
+     */
+    @PreAuthorize("@ss.hasPermi('mes:wm:outsourcerecpt:query')")
+    @GetMapping(value = "/{recptId}")
+    public AjaxResult getInfo(@PathVariable("recptId") Long recptId)
+    {
+        return AjaxResult.success(wmOutsourceRecptService.selectWmOutsourceRecptByRecptId(recptId));
+    }
+
+    /**
+     * 新增外协入库单
+     */
+    @PreAuthorize("@ss.hasPermi('mes:wm:outsourcerecpt:add')")
+    @Log(title = "外协入库单", businessType = BusinessType.INSERT)
+    @PostMapping
+    public AjaxResult add(@RequestBody WmOutsourceRecpt wmOutsourceRecpt)
+    {
+        if(StringUtils.isNotNull(wmOutsourceRecpt.getRecptCode())){
+            if(UserConstants.NOT_UNIQUE.equals(wmOutsourceRecptService.checkIssueCodeUnique(wmOutsourceRecpt))){
+                return  AjaxResult.error("编号已存在！");
+            }
+        }else{
+            wmOutsourceRecpt.setRecptCode(autoCodeUtil.genSerialCode(UserConstants.WM_OUTSOURCE_RECPT_CODE,""));
+        }
+
+        wmOutsourceRecpt.setCreateBy(getUsername());
+        wmOutsourceRecptService.insertWmOutsourceRecpt(wmOutsourceRecpt);
+        return AjaxResult.success(wmOutsourceRecpt);
+    }
+
+    /**
+     * 修改外协入库单
+     */
+    @PreAuthorize("@ss.hasPermi('mes:wm:outsourcerecpt:edit')")
+    @Log(title = "外协入库单", businessType = BusinessType.UPDATE)
+    @PutMapping
+    public AjaxResult edit(@RequestBody WmOutsourceRecpt wmOutsourceRecpt)
+    {
+        if(UserConstants.NOT_UNIQUE.equals(wmOutsourceRecptService.checkIssueCodeUnique(wmOutsourceRecpt))){
+            return  AjaxResult.error("编号已存在！");
+        }
+
+        WmOutsourceRecptLine param = new WmOutsourceRecptLine();
+        param.setRecptId(wmOutsourceRecpt.getRecptId());
+        List<WmOutsourceRecptLine> lines = wmOutsourceRecptLineService.selectWmOutsourceRecptLineByRecptId(wmOutsourceRecpt.getRecptId());
+
+        //如果是向“待上架"状态提交，则判断行里面是否有待检验的物资，如果是，则状态改为“待检验”
+        if(UserConstants.OUTSOURCE_RECPT_STATUS_UNSTOCK.equals(wmOutsourceRecpt.getStatus())){
+            if(org.apache.commons.collections.CollectionUtils.isNotEmpty(lines)){
+                for(WmOutsourceRecptLine line : lines){
+                    if(UserConstants.QUALITY_STATUS_NOTTEST.equals(line.getQualityStatus())){
+                        wmOutsourceRecpt.setStatus(UserConstants.OUTSOURCE_RECPT_STATUS_UNCHECK);
+                        break;
+                    }
+                }
+            }else{
+                return AjaxResult.error("请添加退料物资!");
+            }
+        }
+
+        //如果是向“待执行入库”状态提交，则检查行上的数量与明细行上总数量是否一致
+        if(UserConstants.OUTSOURCE_RECPT_STATUS_UNEXECUTE.equals(wmOutsourceRecpt.getStatus())) {
+            boolean flag = true;
+            StringBuilder sb = new StringBuilder();
+            if(org.apache.commons.collections.CollectionUtils.isNotEmpty(lines)){
+                for(WmOutsourceRecptLine line : lines){
+                    if(UserConstants.LESS_THAN.equals(wmOutsourceRecptDetailService.checkQuantity(line.getLineId()))){
+                        flag = false;
+                        sb.append(line.getItemName()).append(line.getBatchCode()).append("未完成上架！");
+                    }
+                }
+            }
+
+            if(!flag){
+                return AjaxResult.error(sb.toString());
+            }
+        }
+
+        return toAjax(wmOutsourceRecptService.updateWmOutsourceRecpt(wmOutsourceRecpt));
+    }
+
+    /**
+     * 删除外协入库单
+     */
+    @PreAuthorize("@ss.hasPermi('mes:wm:outsourcerecpt:remove')")
+    @Log(title = "外协入库单", businessType = BusinessType.DELETE)
+    @Transactional
+    @DeleteMapping("/{recptIds}")
+    public AjaxResult remove(@PathVariable Long[] recptIds)
+    {
+        for (Long recptId:recptIds
+        ) {
+            if(UserConstants.OUTSOURCE_RECPT_STATUS_PREPARE.equals(wmOutsourceRecptService.selectWmOutsourceRecptByRecptId(recptId).getStatus())){
+                TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+                return AjaxResult.error("只能删除草稿状态的单据！");
+            }
+
+            wmOutsourceRecptLineService.deleteWmOutsourceRecptLineByLineId(recptId);
+        }
+        return toAjax(wmOutsourceRecptService.deleteWmOutsourceRecptByRecptIds(recptIds));
+    }
+
+    /**
+     * 执行入库
+     * @return
+     */
+    @PreAuthorize("@ss.hasPermi('mes:wm:outsourcerecpt:edit')")
+    @Log(title = "外协入库单", businessType = BusinessType.UPDATE)
+    @Transactional
+    @PutMapping("/{recptId}")
+    public AjaxResult execute(@PathVariable Long recptId){
+
+        WmOutsourceRecpt recpt = wmOutsourceRecptService.selectWmOutsourceRecptByRecptId(recptId);
+
+        List<WmOutsourceRecptLine> lines = wmOutsourceRecptLineService.selectWmOutsourceRecptLineByRecptId(recptId);
+        if(CollectionUtils.isEmpty(lines)){
+            return AjaxResult.error("请指定入库的物资！");
+        }
+
+        //构造Transaction事务，并执行库存更新逻辑
+        List<OutsourceRecptTxBean> beans = wmOutsourceRecptService.getTxBeans(recptId);
+
+        //调用库存核心
+        storageCoreService.processOutsourceRecpt(beans);
+
+        //根据当前入库的物料更新对应的生产工单/生产任务 已生产数量
+        ProWorkorder workorder = proWorkorderService.selectProWorkorderByWorkorderId(recpt.getWorkorderId());
+        if(!StringUtils.isNotNull(workorder)){
+            return AjaxResult.error("未找到对应的外协工单/外协任务！");
+        }
+
+        //正常外协入库的产品必须先经过检验，确认合格数量后才能执行入库，并且更新外协工单的进度。此处暂时先直接根据入库数量更新外协工单的生产数量。
+        BigDecimal produced = workorder.getQuantityProduced() == null?new BigDecimal(0):workorder.getQuantityProduced();
+        for (int i = 0; i < lines.size(); i++) {
+            WmOutsourceRecptLine line = lines.get(i);
+            //判断入库的物资，如果是生产工单中的产品，则更新已生产数量
+            if(line.getItemCode().equals(workorder.getProductCode())){
+                workorder.setQuantityProduced( produced.add(line.getQuantityRecived()));
+            }
+        }
+        proWorkorderService.updateProWorkorder(workorder);
+
+        //更新单据状态
+        recpt.setStatus(UserConstants.ORDER_STATUS_FINISHED);
+        wmOutsourceRecptService.updateWmOutsourceRecpt(recpt);
+
+        return AjaxResult.success();
+    }
+
+}

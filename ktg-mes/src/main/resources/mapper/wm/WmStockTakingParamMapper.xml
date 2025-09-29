@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ktg.mes.wm.mapper.WmStockTakingParamMapper">
+    
+    <resultMap type="WmStockTakingParam" id="WmStockTakingParamResult">
+        <result property="paramId"    column="param_id"    />
+        <result property="planId"    column="plan_id"    />
+        <result property="paramType"    column="param_type"    />
+        <result property="paramValueId"    column="param_value_id"    />
+        <result property="paramValueCode"    column="param_value_code"    />
+        <result property="paramValueName"    column="param_value_name"    />
+        <result property="remark"    column="remark"    />
+        <result property="attr1"    column="attr1"    />
+        <result property="attr2"    column="attr2"    />
+        <result property="attr3"    column="attr3"    />
+        <result property="attr4"    column="attr4"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectWmStockTakingParamVo">
+        select param_id, plan_id, param_type, param_value_id, param_value_code, param_value_name, remark, attr1, attr2, attr3, attr4, create_by, create_time, update_by, update_time from wm_stock_taking_param
+    </sql>
+
+    <select id="selectWmStockTakingParamList" parameterType="WmStockTakingParam" resultMap="WmStockTakingParamResult">
+        <include refid="selectWmStockTakingParamVo"/>
+        <where>  
+            <if test="planId != null "> and plan_id = #{planId}</if>
+            <if test="paramType != null  and paramType != ''"> and param_type = #{paramType}</if>
+            <if test="paramValueId != null "> and param_value_id = #{paramValueId}</if>
+            <if test="paramValueCode != null  and paramValueCode != ''"> and param_value_code = #{paramValueCode}</if>
+            <if test="paramValueName != null  and paramValueName != ''"> and param_value_name like concat('%', #{paramValueName}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectWmStockTakingParamByParamId" parameterType="Long" resultMap="WmStockTakingParamResult">
+        <include refid="selectWmStockTakingParamVo"/>
+        where param_id = #{paramId}
+    </select>
+
+    <insert id="insertWmStockTakingParam" parameterType="WmStockTakingParam" useGeneratedKeys="true" keyProperty="paramId">
+        insert into wm_stock_taking_param
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="planId != null">plan_id,</if>
+            <if test="paramType != null">param_type,</if>
+            <if test="paramValueId != null">param_value_id,</if>
+            <if test="paramValueCode != null">param_value_code,</if>
+            <if test="paramValueName != null">param_value_name,</if>
+            <if test="remark != null">remark,</if>
+            <if test="attr1 != null">attr1,</if>
+            <if test="attr2 != null">attr2,</if>
+            <if test="attr3 != null">attr3,</if>
+            <if test="attr4 != null">attr4,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="planId != null">#{planId},</if>
+            <if test="paramType != null">#{paramType},</if>
+            <if test="paramValueId != null">#{paramValueId},</if>
+            <if test="paramValueCode != null">#{paramValueCode},</if>
+            <if test="paramValueName != null">#{paramValueName},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="attr1 != null">#{attr1},</if>
+            <if test="attr2 != null">#{attr2},</if>
+            <if test="attr3 != null">#{attr3},</if>
+            <if test="attr4 != null">#{attr4},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateWmStockTakingParam" parameterType="WmStockTakingParam">
+        update wm_stock_taking_param
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="planId != null">plan_id = #{planId},</if>
+            <if test="paramType != null">param_type = #{paramType},</if>
+            <if test="paramValueId != null">param_value_id = #{paramValueId},</if>
+            <if test="paramValueCode != null">param_value_code = #{paramValueCode},</if>
+            <if test="paramValueName != null">param_value_name = #{paramValueName},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="attr1 != null">attr1 = #{attr1},</if>
+            <if test="attr2 != null">attr2 = #{attr2},</if>
+            <if test="attr3 != null">attr3 = #{attr3},</if>
+            <if test="attr4 != null">attr4 = #{attr4},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where param_id = #{paramId}
+    </update>
+
+    <delete id="deleteWmStockTakingParamByParamId" parameterType="Long">
+        delete from wm_stock_taking_param where param_id = #{paramId}
+    </delete>
+
+    <delete id="deleteWmStockTakingParamByParamIds" parameterType="String">
+        delete from wm_stock_taking_param where param_id in 
+        <foreach item="paramId" collection="array" open="(" separator="," close=")">
+            #{paramId}
+        </foreach>
+    </delete>
+</mapper>

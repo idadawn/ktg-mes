@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ktg.mes.wm.mapper.WmProductSalesMapper">
+    
+    <resultMap type="WmProductSales" id="WmProductSalesResult">
+        <result property="salesId"    column="sales_id"    />
+        <result property="salesCode"    column="sales_code"    />
+        <result property="salesName"    column="sales_name"    />
+        <result property="noticeId"    column="notice_id"    />
+        <result property="noticeCode"    column="notice_code"    />
+        <result property="soCode"    column="so_code"    />
+        <result property="clientId"    column="client_id"    />
+        <result property="clientCode"    column="client_code"    />
+        <result property="clientName"    column="client_name"    />
+        <result property="clientNick"    column="client_nick"    />
+        <result property="recipient"    column="recipient"    />
+        <result property="tel"    column="tel"    />
+        <result property="address"    column="address"    />
+        <result property="carrier"    column="carrier"    />
+        <result property="shippingNumber"    column="shipping_number"    />
+        <result property="salesDate"    column="sales_date"    />
+        <result property="status"    column="status"    />
+        <result property="remark"    column="remark"    />
+        <result property="attr1"    column="attr1"    />
+        <result property="attr2"    column="attr2"    />
+        <result property="attr3"    column="attr3"    />
+        <result property="attr4"    column="attr4"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <resultMap id="SaleRecordVOResult" type="SaleRecordVO">
+        <result property="lineId"    column="line_id"    />
+        <result property="salesId"    column="sales_id"    />
+        <result property="materialStockId"    column="material_stock_id"    />
+        <result property="itemId"    column="item_id"    />
+        <result property="itemCode"    column="item_code"    />
+        <result property="itemName"    column="item_name"    />
+        <result property="specification"    column="specification"    />
+        <result property="unitOfMeasure"    column="unit_of_measure"    />
+        <result property="quantitySales"    column="quantity_sales"    />
+        <result property="batchCode"    column="batch_code"    />
+        <result property="warehouseId"    column="warehouse_id"    />
+        <result property="warehouseCode"    column="warehouse_code"    />
+        <result property="warehouseName"    column="warehouse_name"    />
+        <result property="oqcId"  column="oqc_id"></result>
+        <result property="oqcCode"  column="oqc_code"></result>
+        <result property="salesId"    column="sales_id"    />
+        <result property="salesCode"    column="sales_code"    />
+        <result property="salesName"    column="sales_name"    />
+        <result property="oqcId"    column="oqc_id"    />
+        <result property="oqcCode"    column="oqc_code"    />
+        <result property="soCode"    column="so_code"    />
+        <result property="clientId"    column="client_id"    />
+        <result property="clientCode"    column="client_code"    />
+        <result property="clientName"    column="client_name"    />
+        <result property="clientNick"    column="client_nick"    />
+        <result property="warehouseId"    column="warehouse_id"    />
+        <result property="warehouseCode"    column="warehouse_code"    />
+        <result property="warehouseName"    column="warehouse_name"    />
+    </resultMap>
+
+    <resultMap id="ProductSalesTxBeanResult" type="ProductSalesTxBean">
+        <result property="materialStockId" column="material_stock_id"></result>
+        <result property="itemId" column="item_id"></result>
+        <result property="itemCode" column="item_code"></result>
+        <result property="itemName" column="item_name"></result>
+        <result property="specification" column="specification"></result>
+        <result property="unitOfMeasure" column="unit_of_measure"></result>
+        <result property="unitName" column="unit_name"></result>
+        <result property="batchId" column="batch_id"></result>
+        <result property="batchCode" column="batch_code"></result>
+        <result property="warehouseId" column="warehouse_id"></result>
+        <result property="warehouseCode" column="warehouse_code"></result>
+        <result property="warehouseName" column="warehouse_name"></result>
+        <result property="locationId" column="location_id"></result>
+        <result property="locationCode" column="location_code"></result>
+        <result property="locationName" column="location_name"></result>
+        <result property="areaId" column="area_id"></result>
+        <result property="areaCode" column="area_code"></result>
+        <result property="areaName" column="area_name"></result>
+        <result property="clientId" column="client_id"></result>
+        <result property="clientCode" column="client_code"></result>
+        <result property="clientName" column="client_name"></result>
+        <result property="clientNick" column="client_nick"></result>
+        <result property="sourceDocType" column="source_doc_type"></result>
+        <result property="sourceDocId" column="source_doc_id"></result>
+        <result property="sourceDocCode" column="source_doc_code"></result>
+        <result property="sourceDocLineId" column="source_doc_line_id"></result>
+        <result property="transactionQuantity" column="transaction_quantity"></result>
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <resultMap type="WmProductSalesLine" id="WmProductSalesLineResult">
+        <result property="lineId"    column="line_id"    />
+        <result property="salesId"    column="sales_id"    />
+        <result property="materialStockId"    column="material_stock_id"    />
+        <result property="itemId"    column="item_id"    />
+        <result property="itemCode"    column="item_code"    />
+        <result property="itemName"    column="item_name"    />
+        <result property="specification"    column="specification"    />
+        <result property="unitOfMeasure"    column="unit_of_measure"    />
+        <result property="unitName"    column="unit_name"    />
+        <result property="quantitySales"    column="quantity_sales"    />
+        <result property="batchId"    column="batch_id"    />
+        <result property="batchCode"    column="batch_code"    />
+        <result property="oqcCheck"  column="oqc_check"></result>
+        <result property="oqcId"  column="oqc_id"></result>
+        <result property="oqcCode"  column="oqc_code"></result>
+        <result property="qualityStatus"  column="quality_status"></result>
+        <result property="remark"    column="remark"    />
+        <result property="attr1"    column="attr1"    />
+        <result property="attr2"    column="attr2"    />
+        <result property="attr3"    column="attr3"    />
+        <result property="attr4"    column="attr4"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectWmProductSalesVo">
+        select sales_id, sales_code, sales_name, notice_id, notice_code, so_code, client_id, client_code, client_name, client_nick, recipient, tel, address, carrier, shipping_number, sales_date, status, remark, attr1, attr2, attr3, attr4, create_by, create_time, update_by, update_time from wm_product_sales
+    </sql>
+
+    <select id="selectWmProductSalesList" parameterType="WmProductSales" resultMap="WmProductSalesResult">
+        <include refid="selectWmProductSalesVo"/>
+        <where>  
+            <if test="salesCode != null  and salesCode != ''"> and sales_code = #{salesCode}</if>
+            <if test="salesName != null  and salesName != ''"> and sales_name like concat('%', #{salesName}, '%')</if>
+            <if test="noticeId != null " > and notice_id = #{noticeId}</if>
+            <if test="noticeCode != null  and noticeCode != ''"> and notice_code = #{noticeCode}</if>
+            <if test="soCode != null  and soCode != ''"> and so_code = #{soCode}</if>
+            <if test="clientId != null "> and client_id = #{clientId}</if>
+            <if test="clientCode != null  and clientCode != ''"> and client_code = #{clientCode}</if>
+            <if test="clientName != null  and clientName != ''"> and client_name like concat('%', #{clientName}, '%')</if>
+            <if test="clientNick != null  and clientNick != ''"> and client_nick = #{clientNick}</if>
+            <if test="recipient != null  and recipient != ''"> and recipient = #{recipient}</if>
+            <if test="tel != null  and tel != ''"> and tel = #{tel}</if>
+            <if test="address != null  and address != ''"> and address = #{address}</if>
+            <if test="carrier != null  and carrier != ''"> and carrier = #{carrier}</if>
+            <if test="shippingNumber != null  and shippingNumber != ''"> and shipping_number = #{shippingNumber}</if>
+            <if test="salesDate != null "> and sales_date = #{salesDate}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+        order by create_time desc
+    </select>
+    
+    <select id="selectWmProductSalesBySalesId" parameterType="Long" resultMap="WmProductSalesResult">
+        <include refid="selectWmProductSalesVo"/>
+        where sales_id = #{salesId}
+    </select>
+
+    <select id="checkUnique" parameterType="WmProductSales" resultMap="WmProductSalesResult">
+        <include refid="selectWmProductSalesVo"/>
+        where sales_code = #{salesCode}
+    </select>
+
+    <select id="getTxBeans" parameterType="Long" resultMap="ProductSalesTxBeanResult">
+        SELECT ird.material_stock_id, irl.`item_id`,irl.`item_code`,irl.`item_name`,irl.`specification`,irl.`unit_of_measure`,irl.`unit_name`, ird.`batch_id`, ird.`batch_code`,
+               ird.`warehouse_id`,ird.`warehouse_code`,ird.`warehouse_name`,ird.`location_id`,ird.`location_code`,ird.`location_name`,
+               ird.`area_id`,ird.`area_code`,ird.`area_name`,
+               'PRODUCT_SALES' AS source_doc_type,ir.`sales_id` AS source_doc_id,ir.`sales_code` AS source_doc_code,irl.`line_id` AS source_doc_line_id,
+               ird.`quantity` AS transaction_quantity,
+               ir.`create_by`,ir.`create_time`,ir.`update_by`,ir.`update_time`
+        FROM wm_product_sales ir
+                 LEFT JOIN wm_product_sales_line irl
+                           ON ir.sales_id = irl.`sales_id`
+                 LEFT JOIN wm_product_sales_detail ird
+                           ON irl.line_id = ird.line_id and ir.sales_id = ird.sales_id
+        WHERE ir.`sales_id` = #{salesId}
+    </select>
+    <select id="getItem" resultType="com.ktg.mes.wm.domain.WmProductSalesLine" resultMap="WmProductSalesLineResult">
+        select * from wm_product_sales_line
+        where sales_id in ( select sales_id from wm_product_sales where client_id = #{clientId} )
+    </select>
+    <select id="getSaleRecord" resultType="com.ktg.mes.wm.domain.vo.SaleRecordVO" resultMap="WmProductSalesResult">
+        <include refid="selectWmProductSalesVo"/>
+        where
+            client_id = #{clientId}
+    </select>
+
+    <insert id="insertWmProductSales" parameterType="WmProductSales" useGeneratedKeys="true" keyProperty="salesId">
+        insert into wm_product_sales
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="salesCode != null and salesCode != ''">sales_code,</if>
+            <if test="salesName != null and salesName != ''">sales_name,</if>
+            <if test="noticeId != null" >notice_id,</if>
+            <if test="noticeCode != null and noticeCode != ''">notice_code,</if>
+            <if test="soCode != null">so_code,</if>
+            <if test="clientId != null">client_id,</if>
+            <if test="clientCode != null">client_code,</if>
+            <if test="clientName != null">client_name,</if>
+            <if test="clientNick != null">client_nick,</if>
+            <if test="recipient != null">recipient,</if>
+            <if test="tel != null">tel,</if>
+            <if test="address != null">address,</if>
+            <if test="carrier != null">carrier,</if>
+            <if test="shippingNumber != null">shipping_number,</if>
+            <if test="salesDate != null">sales_date,</if>
+            <if test="status != null">status,</if>
+            <if test="remark != null">remark,</if>
+            <if test="attr1 != null">attr1,</if>
+            <if test="attr2 != null">attr2,</if>
+            <if test="attr3 != null">attr3,</if>
+            <if test="attr4 != null">attr4,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="salesCode != null and salesCode != ''">#{salesCode},</if>
+            <if test="salesName != null and salesName != ''">#{salesName},</if>
+            <if test="noticeId != null" >#{noticeId},</if>
+            <if test="noticeCode != null and noticeCode != ''">#{noticeCode},</if>
+            <if test="soCode != null">#{soCode},</if>
+            <if test="clientId != null">#{clientId},</if>
+            <if test="clientCode != null">#{clientCode},</if>
+            <if test="clientName != null">#{clientName},</if>
+            <if test="clientNick != null">#{clientNick},</if>
+            <if test="recipient != null">#{recipient},</if>
+            <if test="tel != null">#{tel},</if>
+            <if test="address != null">#{address},</if>
+            <if test="carrier != null">#{carrier},</if>
+            <if test="shippingNumber != null">#{shippingNumber},</if>
+            <if test="salesDate != null">#{salesDate},</if>
+            <if test="status != null">#{status},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="attr1 != null">#{attr1},</if>
+            <if test="attr2 != null">#{attr2},</if>
+            <if test="attr3 != null">#{attr3},</if>
+            <if test="attr4 != null">#{attr4},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateWmProductSales" parameterType="WmProductSales">
+        update wm_product_sales
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="salesCode != null and salesCode != ''">sales_code = #{salesCode},</if>
+            <if test="salesName != null and salesName != ''">sales_name = #{salesName},</if>
+            <if test="noticeId != null" >notice_id = #{noticeId},</if>
+            <if test="noticeCode != null and noticeCode != ''">notice_code = #{noticeCode},</if>
+            <if test="soCode != null">so_code = #{soCode},</if>
+            <if test="clientId != null">client_id = #{clientId},</if>
+            <if test="clientCode != null">client_code = #{clientCode},</if>
+            <if test="clientName != null">client_name = #{clientName},</if>
+            <if test="clientNick != null">client_nick = #{clientNick},</if>
+            <if test="recipient != null">recipient = #{recipient},</if>
+            <if test="tel != null">tel = #{tel},</if>
+            <if test="address != null">address = #{address},</if>
+            <if test="carrier != null">carrier = #{carrier},</if>
+            <if test="shippingNumber != null">shipping_number = #{shippingNumber},</if>
+            <if test="salesDate != null">sales_date = #{salesDate},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="attr1 != null">attr1 = #{attr1},</if>
+            <if test="attr2 != null">attr2 = #{attr2},</if>
+            <if test="attr3 != null">attr3 = #{attr3},</if>
+            <if test="attr4 != null">attr4 = #{attr4},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where sales_id = #{salesId}
+    </update>
+
+    <delete id="deleteWmProductSalesBySalesId" parameterType="Long">
+        delete from wm_product_sales where sales_id = #{salesId}
+    </delete>
+
+    <delete id="deleteWmProductSalesBySalesIds" parameterType="String">
+        delete from wm_product_sales where sales_id in 
+        <foreach item="salesId" collection="array" open="(" separator="," close=")">
+            #{salesId}
+        </foreach>
+    </delete>
+</mapper>
