@@ -1,0 +1,150 @@
+
+services:
+  # MySQL数据库
+  mysql:
+    image: mysql:5.7
+    container_name: ktg-mes-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ktgmes123
+      MYSQL_DATABASE: ktgmes
+      MYSQL_USER: ktgmes
+      MYSQL_PASSWORD: ktgmes123
+    ports:
+      - "8001:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./sql:/docker-entrypoint-initdb.d
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --default-time-zone=+08:00
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "ktgmes", "-pktgmes123"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - ktg-mes-network
+
+  # Redis缓存
+  redis:
+    image: redis:6.2-alpine
+    container_name: ktg-mes-redis
+    restart: unless-stopped
+    ports:
+      - "8002:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+    networks:
+      - ktg-mes-network
+
+  # MinIO对象存储
+  minio:
+    image: minio/minio:latest
+    container_name: ktg-mes-minio
+    restart: unless-stopped
+    ports:
+      - "8003:9000"
+      - "8004:9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin123
+    volumes:
+      - minio_data:/data
+    command: server /data --console-address ":9001"
+    networks:
+      - ktg-mes-network
+
+  # RabbitMQ消息队列（可选）
+  rabbitmq:
+    image: rabbitmq:3.9-management
+    container_name: ktg-mes-rabbitmq
+    restart: unless-stopped
+    ports:
+      - "8005:5672"
+      - "8006:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin123
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - ktg-mes-network
+
+  # Nginx反向代理
+  nginx:
+    image: nginx:1.21-alpine
+    container_name: ktg-mes-nginx
+    restart: unless-stopped
+    ports:
+      - "8000:80"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./nginx/ssl:/etc/nginx/ssl
+      - ./nginx/logs:/var/log/nginx
+      - ./upload:/usr/share/nginx/html/upload
+      - frontend_dist:/usr/share/nginx/html
+    depends_on:
+      - ktg-mes-app
+      - ktg-mes-ui-builder
+    networks:
+      - ktg-mes-network
+
+  # KTG-MES前端构建
+  ktg-mes-ui-builder:
+    image: node:16-alpine
+    container_name: ktg-mes-ui-builder
+    working_dir: /app
+    volumes:
+      - ./frontend:/app
+      - frontend_dist:/app/dist
+    command: sh -c "npm config set registry https://registry.npmmirror.com/ && npm install --no-audit --no-fund && npm run build:prod && cp -r dist/* /app/dist/ && echo 'Frontend build completed successfully'"
+    networks:
+      - ktg-mes-network
+
+  # KTG-MES应用
+  ktg-mes-app:
+    image: openjdk:8
+    container_name: ktg-mes-app
+    restart: unless-stopped
+    ports:
+      - "8007:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/ktgmes?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+      - SPRING_DATASOURCE_USERNAME=ktgmes
+      - SPRING_DATASOURCE_PASSWORD=ktgmes123
+      - SPRING_REDIS_HOST=redis
+      - SPRING_REDIS_PORT=6379
+      - MINIO_ENDPOINT=http://minio:9000
+      - MINIO_ACCESS_KEY=minioadmin
+      - MINIO_SECRET_KEY=minioadmin123
+    volumes:
+      - ./logs:/app/logs
+      - ./upload:/app/upload
+      - ./config:/app/config
+      - ./ktg-admin.jar:/app/ktg-admin.jar
+    command: sh -c "echo 'Waiting for database to be ready...' && sleep 30 && cd /app && java -jar ktg-admin.jar --spring.config.location=/app/config/"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      minio:
+        condition: service_started
+    networks:
+      - ktg-mes-network
+
+volumes:
+  mysql_data:
+  redis_data:
+  minio_data:
+  rabbitmq_data:
+  frontend_dist:
+
+networks:
+  ktg-mes-network:
+    driver: bridge

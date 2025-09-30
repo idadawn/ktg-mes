@@ -1,0 +1,1 @@
+(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["chunk-2d2254bf"],{e493:function(e,p,n){"use strict";n.r(p),p["default"]={panels:[{index:0,height:297,width:210,paperHeader:0,paperFooter:0,printElements:[],paperNumberDisabled:!0}]}}}]);

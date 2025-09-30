@@ -1,0 +1,17 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: jdbc:mysql://mysql:3306/ktgmes?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B8
+    username: ktgmes
+    password: ktgmes123
+  redis:
+    host: redis
+    port: 6379
+
+# Token configuration
+token:
+  header: Authorization
+  secret: abcdefghijklmnopqrstuvwxyz
+  expire-time: 30
