@@ -50,3 +50,4 @@ application-pro.yml
 #忽略所有target目录
 target/
 .vscode
+ktg-admin.jar
