@@ -127,7 +127,7 @@ services:
       - ./upload:/app/upload
       - ./config:/app/config
       - ./ktg-admin.jar:/app/ktg-admin.jar
-    command: sh -c "echo 'Waiting for database to be ready...' && sleep 30 && cd /app && java -jar ktg-admin.jar --spring.config.location=/app/config/"
+    command: sh -c "echo 'Waiting for database to be ready...' && sleep 45 && cd /app && java -jar ktg-admin.jar --spring.config.location=/app/config/"
     depends_on:
       mysql:
         condition: service_healthy
